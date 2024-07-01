@@ -1,2 +1,4 @@
 import { Logger } from './logger'
-export { Logger }
+import { FileUtil } from './fileUtil'
+
+export { Logger, FileUtil }

@@ -4,7 +4,7 @@ interface ProjectInfo {
   useFramework: boolean
   usePrettier: boolean
   useEslint: boolean
-  frameworkType: string
+  frameworkType: 'default' | 'react' | 'vue' | 'express'
 }
 
 export { ProjectInfo }
