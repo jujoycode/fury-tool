@@ -1,6 +1,7 @@
 import { PromptObject } from '../lib'
 
-const PROJECT_INIT: PromptObject[] = [
+const PROJECT_INFO = ['projectName', 'useTypescript', 'useFramework', 'usePrettier', 'useEslint']
+const PROJECT_INIT_PROMPT: PromptObject[] = [
   {
     type: 'text',
     name: 'projectName',
@@ -45,4 +46,4 @@ const USE_FRAMEWORK: PromptObject[] = [
   }
 ]
 
-export { PROJECT_INIT, USE_FRAMEWORK }
+export { PROJECT_INFO, PROJECT_INIT_PROMPT, USE_FRAMEWORK }

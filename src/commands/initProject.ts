@@ -1,8 +1,9 @@
 import { BaseCommand } from './'
 import { ProjectFactory } from '../factory'
-import { PROJECT_INIT, USE_FRAMEWORK } from '../constants'
+import { PROJECT_INFO, PROJECT_INIT_PROMPT, USE_FRAMEWORK } from '../constants'
 
 import { ProjectInfo } from '../interfaces/project'
+import { CommonUtil } from '../utils/commonUtil'
 
 /**
  * @name InitProject
@@ -21,18 +22,19 @@ export class InitProject extends BaseCommand {
     this.logger.space()
 
     // 0. Project 생성을 위한 기본 정보 취득 (prompt)
-    const projectInitResponses = await this.prompt.call(PROJECT_INIT)
+    const projectInitResponses = await this.prompt.call(PROJECT_INIT_PROMPT)
     Object.assign(this.projectInfo, projectInitResponses)
 
-    // 0-1. Framework 종류 정보 취득 (prompt)
-    if (this.projectInfo.useFramework) {
-      const frameworkResponses = await this.prompt.call(USE_FRAMEWORK)
-      Object.assign(this.projectInfo, frameworkResponses)
-    }
+    // 0-1. 필수값 검증
+    CommonUtil.validateRequireFields(this.projectInfo, PROJECT_INFO)
 
-    this.logger.space()
-    this.logger.debug(this.projectInfo)
-    this.logger.space()
+    // 0-2. Framework 종류 정보 취득 (prompt)
+    if (this.projectInfo.useFramework) {
+      const response = await this.prompt.call(USE_FRAMEWORK)
+      CommonUtil.validateRequireFields(response, ['frameworkType'])
+
+      Object.assign(this.projectInfo, response)
+    }
   }
 
   /**

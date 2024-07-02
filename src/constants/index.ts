@@ -1,3 +1,3 @@
-import { PROJECT_INIT, USE_FRAMEWORK } from './projectPrompt'
+import { PROJECT_INFO, PROJECT_INIT_PROMPT, USE_FRAMEWORK } from './projectPrompt'
 
-export { PROJECT_INIT, USE_FRAMEWORK }
+export { PROJECT_INFO, PROJECT_INIT_PROMPT, USE_FRAMEWORK }
