@@ -1,3 +1,7 @@
+interface FuryOption {
+  git: boolean
+}
+
 interface ProjectInfo {
   projectName: string
   useTypescript: boolean
@@ -7,4 +11,4 @@ interface ProjectInfo {
   frameworkType: 'default' | 'react' | 'vue' | 'express'
 }
 
-export { ProjectInfo }
+export { ProjectInfo, FuryOption }

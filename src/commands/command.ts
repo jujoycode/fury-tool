@@ -12,11 +12,27 @@ export abstract class BaseCommand {
     this.sWorkDir = process.cwd()
   }
 
-  abstract prepare(): Promise<void>
-  abstract execute(): Promise<void>
-  abstract finalize(): Promise<void>
+  protected abstract prepare(): Promise<void>
+  protected abstract execute(): Promise<void>
+  protected abstract finalize(): Promise<void>
 
-  abstract rollback(): Promise<void>
+  protected abstract rollback(errorContext: any): Promise<void>
+
+  /**
+   * @name runCommand
+   * @desc Run the command and handle the lifecycle methods.
+   * @example
+   * new BaseCommand.invoke();
+   */
+  public async invoke() {
+    try {
+      await this.prepare()
+      await this.execute()
+      await this.finalize()
+    } catch (error) {
+      await this.rollback(error)
+    }
+  }
 
   protected setWorkDir(sWorkDir: string) {
     this.sWorkDir = sWorkDir

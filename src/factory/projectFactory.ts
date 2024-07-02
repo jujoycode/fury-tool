@@ -17,7 +17,7 @@ export class ProjectFactory extends BaseFactory {
    * await factory.build();
    */
   async build() {
-    this.logger.info('Build Default Project')
+    this.logger.info('Build Start (Default)')
   }
 
   /**

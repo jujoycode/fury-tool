@@ -31,6 +31,8 @@ export class InitProject extends BaseCommand {
     }
 
     this.logger.space()
+    this.logger.debug(this.projectInfo)
+    this.logger.space()
   }
 
   /**
@@ -41,10 +43,10 @@ export class InitProject extends BaseCommand {
    */
   async execute(): Promise<void> {
     // 1. Factory 생성
-    const factory = new ProjectFactory(this.projectInfo).getFactory()
+    const projectFactory = new ProjectFactory(this.projectInfo).getFactory()
 
     // 2. Build 수행
-    await factory.build()
+    await projectFactory.build()
 
     // 3. 기타 설정파일 생성 (tsconfig.json / .prettierrc.yaml / .gitignore)
   }
@@ -66,7 +68,9 @@ export class InitProject extends BaseCommand {
    * @example
    * await command.rollback();
    */
-  async rollback(): Promise<void> {
+  async rollback(errorContext: any): Promise<void> {
+    this.logger.error(errorContext)
+
     // 99. 에러가 발생한 지점 파악
     // 99-1. Roollback 사전 준비
     // 99-2. Rollback 수행

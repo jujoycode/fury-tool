@@ -17,10 +17,11 @@ export class Logger {
   public static getInstance(): Logger {
     if (!Logger.instance) {
       Logger.instance = new Logger()
-      this.instance.debug('New Instance - Logger')
+      this.instance.debug('New Logger Instance')
+    } else {
+      this.instance.debug('Get Logger Instance')
     }
 
-    this.instance.debug('Get Instance - Logger')
     return Logger.instance
   }
 
@@ -47,7 +48,10 @@ export class Logger {
    * @example
    * logger.log('This is a debug message.');
    */
-  public debug(message: string): void {
+  public debug(message: string | object): void {
+    if (typeof message === 'object') {
+      message = JSON.stringify(message, null, 2)
+    }
     console.log(this.formatMessage('\x1b[36m', 'DEBUG', message))
   }
 

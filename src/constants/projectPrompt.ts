@@ -36,7 +36,7 @@ const PROJECT_INIT: PromptObject[] = [
 const USE_FRAMEWORK: PromptObject[] = [
   {
     type: 'select',
-    name: 'framework',
+    name: 'frameworkType',
     message: 'Select a framework:',
     choices: [
       { title: '\x1b[34mReact\x1b[0m', value: 'react' },

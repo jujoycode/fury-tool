@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import { Command as Commander } from 'commander'
-import { BaseCommand, InitProject } from './commands'
+import { InitProject } from './commands'
 import { Prompt } from './lib'
 import { Logger } from './utils'
 
 import { name, version, description } from '../package.json'
+import { FuryOption } from './interfaces/project'
 
 /**
  * @name App
@@ -23,6 +24,7 @@ class App {
     this.program = new Commander()
     this.prompt = new Prompt()
     this.logger = Logger.getInstance()
+
     this.configureCommands()
   }
 
@@ -33,46 +35,36 @@ class App {
    * this.configureCommands();
    */
   private async configureCommands() {
-    const objCommandParams = { prompt: this.prompt, logger: this.logger }
-
     this.program
       .name(name)
       .option('no option', 'Start create project')
       .option('-g, --git', 'Start git management', false)
       .version(version)
       .description(description)
-      .action(async options => {
-        switch (options) {
-          case options.git: {
-            this.logger.info('Git management is not implemented yet.')
-            break
-          }
+      .action(async (options: FuryOption) => {
+        const command = this.getCommand(options)
 
-          default: {
-            await this.runCommand(new InitProject(objCommandParams))
-          }
+        if (command) {
+          await command.invoke()
         }
       })
   }
 
   /**
-   * @name runCommand
-   * @desc Run the given command and handle the lifecycle methods.
-   * @param {InitProject} command - The command to run.
-   * @example
-   * this.runCommand(new InitProject(params));
+   * @name getCommand
+   * @desc Get the command based on options.
+   * @param {FuryOption} options - The options passed to the program.
    */
-  private async runCommand(command: BaseCommand) {
-    try {
-      this.logger.debug('Running command...')
+  private getCommand(options: FuryOption) {
+    const objCommandParams = { prompt: this.prompt, logger: this.logger }
 
-      await command.prepare()
-      await command.execute()
-      await command.finalize()
-
-      this.logger.debug('Command executed successfully.')
-    } catch (error) {
-      await command.rollback()
+    switch (true) {
+      case options.git: {
+        return undefined
+      }
+      default: {
+        return new InitProject(objCommandParams)
+      }
     }
   }
 
@@ -83,6 +75,7 @@ class App {
    * app.run();
    */
   public run() {
+    this.logger.debug('Program Start')
     this.program.parse(process.argv)
   }
 }
