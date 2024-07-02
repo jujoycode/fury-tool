@@ -1,15 +1,32 @@
-import { ProjectInfo } from "../interfaces/project";
-import { BaseFactory, ReactProjectFactory, VueProjectFactory, ExpressProjectFactory } from './';
+import { ProjectInfo } from '../interfaces/project'
+import { BaseFactory, ReactProjectFactory, VueProjectFactory, ExpressProjectFactory } from './'
 
 export class ProjectFactory extends BaseFactory {
+  /**
+   * @desc Constructor to initialize ProjectFactory with project information.
+   * @param {ProjectInfo} projectInfo - The project information.
+   */
   constructor(projectInfo: ProjectInfo) {
     super(projectInfo)
   }
 
+  /**
+   * @name build
+   * @desc Build the project with default settings.
+   * @example
+   * await factory.build();
+   */
   async build() {
-    this.logger.info('Start Build with Plane')
+    this.logger.info('Build Default Project')
   }
 
+  /**
+   * @name getFactory
+   * @desc Get the specific factory based on the framework type.
+   * @returns {BaseFactory} The specific project factory.
+   * @example
+   * const factory = new ProjectFactory(projectInfo).getFactory();
+   */
   public getFactory(): BaseFactory {
     switch (this.projectInfo?.frameworkType) {
       case 'react': {

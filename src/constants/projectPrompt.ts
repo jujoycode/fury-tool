@@ -39,8 +39,8 @@ const USE_FRAMEWORK: PromptObject[] = [
     name: 'framework',
     message: 'Select a framework:',
     choices: [
-      { title: 'React', value: 'react' },
-      { title: 'Vue', value: 'vue' }
+      { title: '\x1b[34mReact\x1b[0m', value: 'react' },
+      { title: '\x1b[32mVue\x1b[0m', value: 'vue' }
     ]
   }
 ]
