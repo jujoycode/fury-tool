@@ -1,15 +1,15 @@
-import { BaseCommand } from './'
+import { Command } from './'
 import { ProjectFactory } from '../factory'
-import { PROJECT_INFO, PROJECT_INIT_PROMPT, USE_FRAMEWORK } from '../constants'
+import { CommonUtil } from '../utils/commonUtil'
+import { PROJECT_INIT_PROMPT, USE_FRAMEWORK } from '../constants'
 
 import { ProjectInfo } from '../interfaces/project'
-import { CommonUtil } from '../utils/commonUtil'
 
 /**
  * @name InitProject
  * @desc Class representing the initialization of a project.
  */
-export class InitProject extends BaseCommand {
+export class InitProject extends Command {
   private projectInfo: ProjectInfo = {} as ProjectInfo
 
   /**
@@ -26,12 +26,16 @@ export class InitProject extends BaseCommand {
     Object.assign(this.projectInfo, projectInitResponses)
 
     // 0-1. 필수값 검증
-    CommonUtil.validateRequireFields(this.projectInfo, PROJECT_INFO)
+    const requiredField = PROJECT_INIT_PROMPT.map(prompt => String(prompt.name))
+    CommonUtil.validateRequireFields(this.projectInfo, requiredField)
 
     // 0-2. Framework 종류 정보 취득 (prompt)
     if (this.projectInfo.useFramework) {
       const response = await this.prompt.call(USE_FRAMEWORK)
-      CommonUtil.validateRequireFields(response, ['frameworkType'])
+      CommonUtil.validateRequireFields(
+        response,
+        USE_FRAMEWORK.map(prompt => String(prompt.name))
+      )
 
       Object.assign(this.projectInfo, response)
     }
@@ -45,10 +49,10 @@ export class InitProject extends BaseCommand {
    */
   async execute(): Promise<void> {
     // 1. Factory 생성
-    const projectFactory = new ProjectFactory(this.projectInfo).getFactory()
+    const factory = new ProjectFactory(this.projectInfo).getFactory()
 
     // 2. Build 수행
-    await projectFactory.build()
+    await factory.build()
 
     // 3. 기타 설정파일 생성 (tsconfig.json / .prettierrc.yaml / .gitignore)
   }
@@ -70,9 +74,7 @@ export class InitProject extends BaseCommand {
    * @example
    * await command.rollback();
    */
-  async rollback(errorContext: any): Promise<void> {
-    this.logger.error(errorContext)
-
+  async rollback(): Promise<void> {
     // 99. 에러가 발생한 지점 파악
     // 99-1. Roollback 사전 준비
     // 99-2. Rollback 수행

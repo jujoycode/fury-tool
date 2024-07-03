@@ -1,3 +1,5 @@
+import { OperationFailException } from '../exception'
+
 export class CommonUtil {
   constructor() {}
 
@@ -6,7 +8,7 @@ export class CommonUtil {
       const currentValue = targetObject[key]
 
       if (!currentValue) {
-        throw new Error(`NotFoundException : ${key}`)
+        throw new OperationFailException(key)
       }
 
       return true

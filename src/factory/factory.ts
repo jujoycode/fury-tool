@@ -5,7 +5,7 @@ import { Logger } from '../utils'
  * @name BaseFactory
  * @desc Abstract class representing a base factory for project creation.
  */
-export abstract class BaseFactory {
+export abstract class Factory {
   protected logger: Logger
   protected projectInfo: ProjectInfo
 

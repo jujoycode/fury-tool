@@ -1,4 +1,5 @@
 import moment from 'moment'
+import type { Exception } from '../exception'
 
 /**
  * @name Logger
@@ -32,7 +33,7 @@ export class Logger {
    * @param {string} message - The log message.
    * @returns {string} The formatted log message.
    * @example
-   * this.formatMessage('INFO', 'This is an info message.');
+   * this.formatMessage('INFO', 'This is an info message.')
    */
   private formatMessage(color: string, level: string, message: string): string {
     const end = '\x1b[0m'
@@ -46,7 +47,7 @@ export class Logger {
    * @desc Log a debug message.
    * @param {string} message - The log message.
    * @example
-   * logger.log('This is a debug message.');
+   * logger.log('This is a debug message.')
    */
   public debug(message: string | object): void {
     if (typeof message === 'object') {
@@ -60,7 +61,7 @@ export class Logger {
    * @desc Log an info message.
    * @param {string} message - The log message.
    * @example
-   * logger.info('This is an info message.');
+   * logger.info('This is an info message.')
    */
   public info(message: string): void {
     console.info(this.formatMessage('\x1b[32m', 'INFO', message))
@@ -71,7 +72,7 @@ export class Logger {
    * @desc Log a warning message.
    * @param {string} message - The log message.
    * @example
-   * logger.warn('This is a warning message.');
+   * logger.warn('This is a warning message.')
    */
   public warn(message: string): void {
     console.warn(this.formatMessage('\x1b[33m', 'WARN', message))
@@ -80,19 +81,36 @@ export class Logger {
   /**
    * @name error
    * @desc Log an error message.
-   * @param {string} message - The log message.
+   * @param {string} message - The log message
    * @example
-   * logger.error('This is an error message.');
+   * logger.error('This is a error message.')
    */
   public error(message: string): void {
     console.error(this.formatMessage('\x1b[31m', 'ERROR', message))
   }
 
   /**
+   * @name errorD
+   * @desc Log an error message.
+   * @param {Exception} errorContext - The error context
+   * @example
+   * logger.errorD(exception)
+   */
+  public errorD(errorContext: Exception): void {
+    console.error(
+      this.formatMessage(
+        '\x1b[31m',
+        'ERROR DEBUG',
+        `{\n  type: '${errorContext.title}'\n  reason: '${errorContext.message}'\n}`
+      )
+    )
+  }
+
+  /**
    * @name space
    * @desc Log an Empty Line
    * @example
-   * logger.space();
+   * logger.space()
    */
   public space(): void {
     console.log()

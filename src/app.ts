@@ -5,8 +5,8 @@ import { InitProject } from './commands'
 import { Prompt } from './lib'
 import { Logger } from './utils'
 
-import { name, version, description } from '../package.json'
 import { FuryOption } from './interfaces/project'
+import { name, version, description } from '../package.json'
 
 /**
  * @name App
@@ -75,7 +75,7 @@ class App {
    * app.run();
    */
   public run() {
-    this.logger.debug('Program Start')
+    this.logger.info('Starting application...')
     this.program.parse(process.argv)
   }
 }

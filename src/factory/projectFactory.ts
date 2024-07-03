@@ -1,7 +1,7 @@
 import { ProjectInfo } from '../interfaces/project'
-import { BaseFactory, ReactProjectFactory, VueProjectFactory, ExpressProjectFactory } from './'
+import { Factory, ReactProjectFactory, VueProjectFactory, ExpressProjectFactory } from './'
 
-export class ProjectFactory extends BaseFactory {
+export class ProjectFactory extends Factory {
   /**
    * @desc Constructor to initialize ProjectFactory with project information.
    * @param {ProjectInfo} projectInfo - The project information.
@@ -27,7 +27,7 @@ export class ProjectFactory extends BaseFactory {
    * @example
    * const factory = new ProjectFactory(projectInfo).getFactory();
    */
-  public getFactory(): BaseFactory {
+  public getFactory(): Factory {
     switch (this.projectInfo?.frameworkType) {
       case 'react': {
         return new ReactProjectFactory(this.projectInfo)

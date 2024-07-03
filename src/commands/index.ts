@@ -1,4 +1,4 @@
-import { BaseCommand } from './command'
+import { Command } from './command'
 import { InitProject } from './initProject'
 
-export { BaseCommand, InitProject }
+export { Command, InitProject }

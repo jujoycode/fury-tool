@@ -1,6 +1,5 @@
-import { BaseFactory } from './baseFactory';
+import { Factory } from './factory'
 
-export class ReactProjectFactory extends BaseFactory {
-
-  async build() { }
+export class ReactProjectFactory extends Factory {
+  async build() {}
 }

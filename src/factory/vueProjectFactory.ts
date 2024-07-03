@@ -1,6 +1,5 @@
-import { BaseFactory } from './baseFactory';
+import { Factory } from './factory'
 
-export class VueProjectFactory extends BaseFactory {
-
-  async build() { }
+export class VueProjectFactory extends Factory {
+  async build() {}
 }

@@ -1,6 +1,5 @@
-import { BaseFactory } from './baseFactory';
+import { Factory } from './factory'
 
-export class ExpressProjectFactory extends BaseFactory {
-
-  async build() { }
+export class ExpressProjectFactory extends Factory {
+  async build() {}
 }

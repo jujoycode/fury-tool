@@ -1,7 +1,8 @@
 import type { Prompt } from '../lib'
 import type { Logger } from '../utils'
+import type { Exception } from '../exception'
 
-export abstract class BaseCommand {
+export abstract class Command {
   protected prompt: Prompt
   protected logger: Logger
   protected sWorkDir: string
@@ -16,7 +17,7 @@ export abstract class BaseCommand {
   protected abstract execute(): Promise<void>
   protected abstract finalize(): Promise<void>
 
-  protected abstract rollback(errorContext: any): Promise<void>
+  protected abstract rollback(): Promise<void>
 
   /**
    * @name runCommand
@@ -29,8 +30,11 @@ export abstract class BaseCommand {
       await this.prepare()
       await this.execute()
       await this.finalize()
-    } catch (error) {
-      await this.rollback(error)
+    } catch (errorContext: unknown) {
+      const err = errorContext as Exception
+      this.logger.errorD(err)
+
+      await this.rollback()
     }
   }
 
