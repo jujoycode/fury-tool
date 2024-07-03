@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 import { Command as Commander } from 'commander'
+
 import { InitProject } from './commands'
 import { Prompt } from './lib'
 import { Logger } from './utils'
 
 import { FuryOption } from './interfaces/project'
-import { name, version, description } from '../package.json'
+import Package from '../package.json'
 
 /**
  * @name App
@@ -36,12 +37,15 @@ class App {
    */
   private async configureCommands() {
     this.program
-      .name(name)
+      .name(Package.name)
       .option('no option', 'Start create project')
       .option('-g, --git', 'Start git management', false)
-      .version(version)
-      .description(description)
+      .version(Package.version)
+      .description(Package.description)
       .action(async (options: FuryOption) => {
+        const { default: UpdateNotifier } = await import('update-notifier')
+        UpdateNotifier({ pkg: Package }).notify()
+
         const command = this.getCommand(options)
 
         if (command) {
