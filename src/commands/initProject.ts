@@ -1,7 +1,6 @@
 import { Command } from './'
 import { ProjectFactory } from '../factory'
-import { CommonUtil } from '../utils/commonUtil'
-import { PROJECT_INIT_PROMPT, USE_FRAMEWORK } from '../constants'
+import { PROJECT_INIT_PROMPT, USE_FRAMEWORK, USE_GIT } from '../constants'
 
 import { ProjectInfo } from '../interfaces/project'
 
@@ -19,20 +18,18 @@ export class InitProject extends Command {
    * await command.prepare();
    */
   async prepare(): Promise<void> {
-    this.logger.space()
-
     // 0. Project 생성을 위한 기본 정보 취득 (prompt)
-    const projectInitResponses = await this.prompt.call(PROJECT_INIT_PROMPT)
+    const projectInitResponses = await this.Prompt.call(PROJECT_INIT_PROMPT)
     Object.assign(this.projectInfo, projectInitResponses)
 
     // 0-1. 필수값 검증
     const requiredField = PROJECT_INIT_PROMPT.map(prompt => String(prompt.name))
-    CommonUtil.validateRequireFields(this.projectInfo, requiredField)
+    this.CommonUtil.validateRequireFields(this.projectInfo, requiredField)
 
     // 0-2. Framework 종류 정보 취득 (prompt)
     if (this.projectInfo.useFramework) {
-      const response = await this.prompt.call(USE_FRAMEWORK)
-      CommonUtil.validateRequireFields(
+      const response = await this.Prompt.call(USE_FRAMEWORK)
+      this.CommonUtil.validateRequireFields(
         response,
         USE_FRAMEWORK.map(prompt => String(prompt.name))
       )
@@ -53,8 +50,6 @@ export class InitProject extends Command {
 
     // 2. Build 수행
     await factory.build()
-
-    // 3. 기타 설정파일 생성 (tsconfig.json / .prettierrc.yaml / .gitignore)
   }
 
   /**
@@ -64,8 +59,42 @@ export class InitProject extends Command {
    * await command.finalize();
    */
   async finalize(): Promise<void> {
-    // 4. Git 사용 여부에 따라 Init 수행
-    // 5. Package 설치
+    const sWorkPath = ''
+
+    // 3. 후처리
+    // -------------------------------------------------------
+    // 3-1. Git 사용 여부에 따라 Init 수행
+    if (this.projectInfo.useGit) {
+      // 3-1-1. .gitignore 파일 생성
+      await this.FileUtil.createFile(sWorkPath, '.gitignore', '')
+
+      // 3-1-2. git init 수행 (git이 없을 경우 logging 후 진행)
+
+      // 3-1-3. git remote add origin 수행
+    }
+
+    // 3-2. typescript 사용 여부에 따라 tsconfig.json 파일 생성
+    if (this.projectInfo.useTypescript) {
+      const sPath = this.FileUtil.makePath(sWorkPath, 'tsconfig.json')
+
+      const isExist = await this.FileUtil.checkExist(sPath)
+      if (!isExist) {
+        await this.FileUtil.createFile(sWorkPath, 'tsconfig.json', '')
+      }
+    }
+
+    // 3-3. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
+    if (this.projectInfo.usePrettier) {
+      const sPath = this.FileUtil.makePath(sWorkPath, '.prettierrc.yaml')
+
+      const isExist = await this.FileUtil.checkExist(sPath)
+      if (!isExist) {
+        await this.FileUtil.createFile(sWorkPath, '.prettierrc.yaml', '')
+      }
+    }
+
+    // -------------------------------------------------------
+    // 4. Package 설치
   }
 
   /**

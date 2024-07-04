@@ -1,5 +1,7 @@
-import { ProjectInfo } from '../interfaces/project'
 import { Factory, ReactProjectFactory, VueProjectFactory, ExpressProjectFactory } from './'
+import { OperationFailException } from '../exception'
+
+import { ProjectInfo } from '../interfaces/project'
 
 export class ProjectFactory extends Factory {
   /**
@@ -18,6 +20,26 @@ export class ProjectFactory extends Factory {
    */
   async build() {
     this.logger.info('Build Start (Default)')
+
+    try {
+      // 1. Directory 생성
+      await this.FileUtil.createDirectory(this.sWorkDir, this.projectInfo.projectName)
+
+      const sWorkPath = this.FileUtil.makePath(this.sWorkDir, this.projectInfo.projectName)
+
+      // 2. 설정 파일 생성
+      await this.FileUtil.createFile(sWorkPath, 'package.json', '')
+      if (this.projectInfo.useTypescript) {
+        await this.FileUtil.createFile(sWorkPath, 'tsconfig.json', '')
+      }
+
+      // 3.
+
+      // 4.
+    } catch (error: any) {
+      this.logger.errorD(error)
+      throw new OperationFailException('projectBuild')
+    }
   }
 
   /**

@@ -4,10 +4,12 @@ import { Command as Commander } from 'commander'
 
 import { InitProject } from './commands'
 import { Prompt } from './lib'
-import { Logger } from './utils'
+import { Logger, CommonUtil, FileUtil } from './utils'
 
-import { FuryOption } from './interfaces/project'
+import { FuryOption, LogLevel } from './interfaces/project'
+
 import Package from '../package.json'
+import Setting from '../setting.json'
 
 /**
  * @name App
@@ -24,7 +26,8 @@ class App {
   constructor() {
     this.program = new Commander()
     this.prompt = new Prompt()
-    this.logger = Logger.getInstance()
+
+    this.logger = Logger.getInstance(Setting.logLevel as keyof LogLevel)
 
     this.configureCommands()
   }
@@ -44,7 +47,7 @@ class App {
       .description(Package.description)
       .action(async (options: FuryOption) => {
         const { default: UpdateNotifier } = await import('update-notifier')
-        UpdateNotifier({ pkg: Package }).notify()
+        UpdateNotifier({ pkg: Package, updateCheckInterval: 0 }).notify()
 
         const command = this.getCommand(options)
 
@@ -60,7 +63,11 @@ class App {
    * @param {FuryOption} options - The options passed to the program.
    */
   private getCommand(options: FuryOption) {
-    const objCommandParams = { prompt: this.prompt, logger: this.logger }
+    const objCommandParams = {
+      prompt: this.prompt,
+      logger: this.logger,
+      utils: { CommonUtil, FileUtil }
+    }
 
     switch (true) {
       case options.git: {
@@ -79,7 +86,7 @@ class App {
    * app.run();
    */
   public run() {
-    this.logger.info('Starting application...')
+    this.logger.logo()
     this.program.parse(process.argv)
   }
 }

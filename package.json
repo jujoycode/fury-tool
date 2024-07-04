@@ -1,5 +1,5 @@
 {
-  "name": "fury",
+  "name": "fury-tool",
   "version": "0.0.1",
   "description": "CLI tool for JavaScript developers",
   "main": "dist/app.js",

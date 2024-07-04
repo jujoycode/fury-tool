@@ -1,16 +1,27 @@
 import type { Prompt } from '../lib'
-import type { Logger } from '../utils'
+import type { Logger, CommonUtil, FileUtil } from '../utils'
 import type { Exception } from '../exception'
 
 export abstract class Command {
-  protected prompt: Prompt
-  protected logger: Logger
-  protected sWorkDir: string
+  protected Prompt: Prompt
+  protected Logger: Logger
 
-  constructor({ prompt, logger }: { prompt: Prompt; logger: Logger }) {
-    this.prompt = prompt
-    this.logger = logger
-    this.sWorkDir = process.cwd()
+  protected CommonUtil: typeof CommonUtil
+  protected FileUtil: typeof FileUtil
+
+  constructor({
+    prompt,
+    logger,
+    utils
+  }: {
+    prompt: Prompt
+    logger: Logger
+    utils: { CommonUtil: typeof CommonUtil; FileUtil: typeof FileUtil }
+  }) {
+    this.Prompt = prompt
+    this.Logger = logger
+    this.CommonUtil = utils.CommonUtil
+    this.FileUtil = utils.FileUtil
   }
 
   protected abstract prepare(): Promise<void>
@@ -20,8 +31,8 @@ export abstract class Command {
   protected abstract rollback(): Promise<void>
 
   /**
-   * @name runCommand
-   * @desc Run the command and handle the lifecycle methods.
+   * @name invoke
+   * @desc Invoke the command and handle the lifecycle methods.
    * @example
    * new BaseCommand.invoke();
    */
@@ -32,13 +43,8 @@ export abstract class Command {
       await this.finalize()
     } catch (errorContext: unknown) {
       const err = errorContext as Exception
-      this.logger.errorD(err)
-
+      this.Logger.errorD(err)
       await this.rollback()
     }
-  }
-
-  protected setWorkDir(sWorkDir: string) {
-    this.sWorkDir = sWorkDir
   }
 }

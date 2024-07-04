@@ -1,5 +1,7 @@
 import moment from 'moment'
+
 import type { Exception } from '../exception'
+import { LogLevel } from '../interfaces/project'
 
 /**
  * @name Logger
@@ -7,18 +9,30 @@ import type { Exception } from '../exception'
  */
 export class Logger {
   private static instance: Logger
+  private logLevel: number
 
-  private constructor() {}
+  private constructor(logLevel?: keyof LogLevel) {
+    const level = {
+      error: 0,
+      info: 1,
+      warn: 2,
+      debug: 3,
+      trace: 4
+    }
+
+    this.logLevel = logLevel ? level[logLevel] : 2
+  }
 
   /**
    * @name getInstance
    * @desc Get the singleton instance of the Logger.
    * @returns {Logger} The Logger instance.
    */
-  public static getInstance(): Logger {
+  public static getInstance(logLevel?: keyof LogLevel): Logger {
     if (!Logger.instance) {
-      Logger.instance = new Logger()
+      Logger.instance = new Logger(logLevel)
       this.instance.debug('New Logger Instance')
+      this.instance.debug(`Level: ${logLevel}`)
     } else {
       this.instance.debug('Get Logger Instance')
     }
@@ -38,7 +52,6 @@ export class Logger {
   private formatMessage(color: string, level: string, message: string): string {
     const end = '\x1b[0m'
     const timestamp = moment().format('YYYY.MM.DD HH:mm:ss')
-    const pid = process.pid
     return `${timestamp} | ${color}${level}${end} | ${message}`
   }
 
@@ -47,13 +60,15 @@ export class Logger {
    * @desc Log a debug message.
    * @param {string} message - The log message.
    * @example
-   * logger.log('This is a debug message.')
+   * logger.debug('This is a debug message.')
    */
   public debug(message: string | object): void {
-    if (typeof message === 'object') {
-      message = JSON.stringify(message, null, 2)
+    if (this.logLevel >= 3) {
+      if (typeof message === 'object') {
+        message = JSON.stringify(message, null, 2)
+      }
+      console.log(this.formatMessage('\x1b[36m', 'DEBUG', message))
     }
-    console.log(this.formatMessage('\x1b[36m', 'DEBUG', message))
   }
 
   /**
@@ -64,7 +79,9 @@ export class Logger {
    * logger.info('This is an info message.')
    */
   public info(message: string): void {
-    console.info(this.formatMessage('\x1b[32m', 'INFO', message))
+    if (this.logLevel >= 1) {
+      console.info(this.formatMessage('\x1b[32m', 'INFO', message))
+    }
   }
 
   /**
@@ -75,7 +92,9 @@ export class Logger {
    * logger.warn('This is a warning message.')
    */
   public warn(message: string): void {
-    console.warn(this.formatMessage('\x1b[33m', 'WARN', message))
+    if (this.logLevel >= 2) {
+      console.warn(this.formatMessage('\x1b[33m', 'WARN', message))
+    }
   }
 
   /**
@@ -86,7 +105,9 @@ export class Logger {
    * logger.error('This is a error message.')
    */
   public error(message: string): void {
-    console.error(this.formatMessage('\x1b[31m', 'ERROR', message))
+    if (this.logLevel >= 0) {
+      console.error(this.formatMessage('\x1b[31m', 'ERROR', message))
+    }
   }
 
   /**
@@ -97,13 +118,15 @@ export class Logger {
    * logger.errorD(exception)
    */
   public errorD(errorContext: Exception): void {
-    console.error(
-      this.formatMessage(
-        '\x1b[31m',
-        'ERROR DEBUG',
-        `{\n  type: '${errorContext.title}'\n  reason: '${errorContext.message}'\n}`
+    if (this.logLevel >= 4) {
+      console.error(
+        this.formatMessage(
+          '\x1b[31m',
+          'ERROR_D',
+          `{\n  type: '${errorContext.title}'\n  reason: '${errorContext.message}'\n}`
+        )
       )
-    )
+    }
   }
 
   /**
@@ -114,5 +137,31 @@ export class Logger {
    */
   public space(): void {
     console.log()
+  }
+
+  /**
+   * @name logo
+   * @desc Show Program Logo
+   * @example
+   * logger.logo()
+   */
+  public logo(): void {
+    const asciiArt = `
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⡏⡀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⡿⠃⠀⣀⣀⡀⠀⠀⠀⠀⠀⢀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢀⣸⣿⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣗⠀⠀⢀⣠⣶⣿⣿⡇⠀⠀⢀⣾⣾⣾⣾⣾⣾⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⡞⠁⣽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣾⣿⣿⣿⠿⠏⠁⠀⠀⢸⣿⣿⠉⠉⠉⠉⢠⣤⣤⠀⠀⣤⣤⡄⠀⣠⣤⣄⣠⣤⢠⣤⣤⠀⠀⣤⣤⡄⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣾⠅⠨⣿⣿⢿⣿⣿⣿⣿⣿⣿⡏⠈⠘⣻⣿⠉⠈⠀⠀⠀⠀⠀⠀⣽⣿⣿⣾⣾⡎⠀⣼⣿⣟⠀⢐⣿⣿⠃⢀⣿⣿⠿⠛⠓⢘⣿⣿⠀⢰⣿⡟⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⣿⣧⣀⠙⠡⣿⣿⣿⡏⣿⣿⡿⠁⠀⢀⣽⣿⣧⣀⠀⠀⠀⠀⠀⢰⣿⣿⠁⠁⠁⠁⢀⣿⣿⡇⠀⣼⣿⣟⠀⢰⣿⣿⠁⠀⠀⠀⣿⣿⣠⣿⡟⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣧⣍⣉⣁⣀⣤⣾⣿⡿⠿⠋⠀⠀⠀⠀⠀⣾⣿⡯⠀⠀⠀⠀⠘⣿⣿⡿⡿⢻⣿⣟⠀⣽⣿⡏⠀⠀⠀⠀⣻⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⠛⠟⠿⠿⠻⠟⠿⠻⠻⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣾⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+`
+    console.log(asciiArt)
   }
 }
