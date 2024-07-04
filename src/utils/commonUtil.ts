@@ -7,7 +7,7 @@ export class CommonUtil {
     requiredKeys.forEach(key => {
       const currentValue = targetObject[key]
 
-      if (!currentValue) {
+      if (currentValue === undefined) {
         throw new OperationFailException(key)
       }
 

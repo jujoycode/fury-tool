@@ -3,13 +3,13 @@
 import { Command as Commander } from 'commander'
 
 import { InitProject } from './commands'
-import { Prompt } from './lib'
+import { Prompt, UpdateNotifier } from './lib'
 import { Logger, CommonUtil, FileUtil } from './utils'
 
 import { FuryOption, LogLevel } from './interfaces/project'
 
-import Package from '../package.json'
-import Setting from '../setting.json'
+import { logLevel } from '../setting.json'
+import pkg from '../package.json'
 
 /**
  * @name App
@@ -26,8 +26,9 @@ class App {
   constructor() {
     this.program = new Commander()
     this.prompt = new Prompt()
+    UpdateNotifier.call(pkg)
 
-    this.logger = Logger.getInstance(Setting.logLevel as keyof LogLevel)
+    this.logger = Logger.getInstance(logLevel as keyof LogLevel)
 
     this.configureCommands()
   }
@@ -40,15 +41,12 @@ class App {
    */
   private async configureCommands() {
     this.program
-      .name(Package.name)
+      .name(pkg.name)
       .option('no option', 'Start create project')
       .option('-g, --git', 'Start git management', false)
-      .version(Package.version)
-      .description(Package.description)
+      .version(pkg.version)
+      .description(pkg.description)
       .action(async (options: FuryOption) => {
-        const { default: UpdateNotifier } = await import('update-notifier')
-        UpdateNotifier({ pkg: Package, updateCheckInterval: 0 }).notify()
-
         const command = this.getCommand(options)
 
         if (command) {

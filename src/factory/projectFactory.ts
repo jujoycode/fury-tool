@@ -19,8 +19,6 @@ export class ProjectFactory extends Factory {
    * await factory.build();
    */
   async build() {
-    this.logger.info('Build Start (Default)')
-
     try {
       // 1. Directory 생성
       await this.FileUtil.createDirectory(this.sWorkDir, this.projectInfo.projectName)
@@ -33,9 +31,7 @@ export class ProjectFactory extends Factory {
         await this.FileUtil.createFile(sWorkPath, 'tsconfig.json', '')
       }
 
-      // 3.
-
-      // 4.
+      // 3. 프로젝트 기본 구조 생성
     } catch (error: any) {
       this.logger.errorD(error)
       throw new OperationFailException('projectBuild')
