@@ -1,6 +1,8 @@
 import { Factory, ReactProjectFactory, VueProjectFactory, ExpressProjectFactory } from './'
 import { OperationFailException } from '../exception'
 
+import { jsPackageJson, tsPackageJson, tsConfig } from '../templates'
+
 import { ProjectInfo } from '../interfaces/project'
 
 export class ProjectFactory extends Factory {
@@ -13,29 +15,33 @@ export class ProjectFactory extends Factory {
   }
 
   /**
-   * @name build
-   * @desc Build the project with default settings.
+   * @name setup
+   * @desc setup the project with default settings.
    * @example
-   * await factory.build();
+   * await factory.setup();
    */
-  async build() {
-    try {
-      // 1. Directory 생성
-      await this.FileUtil.createDirectory(this.sWorkDir, this.projectInfo.projectName)
+  async setup() {
+    // 1. Directory 생성
+    const sWorkPath = await this.FileUtil.createDirectory(
+      this.sWorkDir,
+      this.projectInfo.projectName
+    )
 
-      const sWorkPath = this.FileUtil.makePath(this.sWorkDir, this.projectInfo.projectName)
-
-      // 2. 설정 파일 생성
-      await this.FileUtil.createFile(sWorkPath, 'package.json', '')
-      if (this.projectInfo.useTypescript) {
-        await this.FileUtil.createFile(sWorkPath, 'tsconfig.json', '')
-      }
-
-      // 3. 프로젝트 기본 구조 생성
-    } catch (error: any) {
-      this.logger.errorD(error)
-      throw new OperationFailException('projectBuild')
+    // 2. 설정 파일 생성
+    await this.FileUtil.createFile(
+      sWorkPath,
+      'package.json',
+      JSON.stringify(jsPackageJson, null, 2)
+    )
+    if (this.projectInfo.useTypescript) {
+      await this.FileUtil.createFile(
+        sWorkPath,
+        'tsconfig.json',
+        JSON.stringify(tsPackageJson, null, 2)
+      )
     }
+
+    // 3. 프로젝트 기본 구조 생성
   }
 
   /**

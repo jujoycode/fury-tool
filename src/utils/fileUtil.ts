@@ -24,7 +24,7 @@ export class FileUtil {
 
       return sPath
     } catch (error: any) {
-      throw new OperationFailException('createDirectory')
+      throw new OperationFailException('createDirectory', error)
     }
   }
 

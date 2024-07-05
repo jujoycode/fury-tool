@@ -25,12 +25,12 @@ export abstract class Factory {
   }
 
   /**
-   * @name build
-   * @desc Abstract method to build the project.
+   * @name setup
+   * @desc Abstract method to setup the project.
    * @example
-   * await factory.build();
+   * await factory.setup();
    */
-  abstract build(): Promise<void>
+  abstract setup(): Promise<void>
 
   /**
    * @name setWorkDir

@@ -36,6 +36,8 @@ export class InitProject extends Command {
 
       Object.assign(this.projectInfo, response)
     }
+
+    this.Logger.space()
   }
 
   /**
@@ -48,8 +50,8 @@ export class InitProject extends Command {
     // 1. Factory 생성
     const factory = new ProjectFactory(this.projectInfo).getFactory()
 
-    // 2. Build 수행
-    await factory.build()
+    // 2. Project Setup
+    await factory.setup()
   }
 
   /**
@@ -66,24 +68,14 @@ export class InitProject extends Command {
     // 3-1. Git 사용 여부에 따라 Init 수행
     if (this.projectInfo.useGit) {
       // 3-1-1. .gitignore 파일 생성
-      await this.FileUtil.createFile(sWorkPath, '.gitignore', '')
+      await this.FileUtil.createFile(sWorkPath, '.gitignore', 'node_modules')
 
       // 3-1-2. git init 수행 (git이 없을 경우 logging 후 진행)
 
       // 3-1-3. git remote add origin 수행
     }
 
-    // 3-2. typescript 사용 여부에 따라 tsconfig.json 파일 생성
-    if (this.projectInfo.useTypescript) {
-      const sPath = this.FileUtil.makePath(sWorkPath, 'tsconfig.json')
-
-      const isExist = await this.FileUtil.checkExist(sPath)
-      if (!isExist) {
-        await this.FileUtil.createFile(sWorkPath, 'tsconfig.json', '')
-      }
-    }
-
-    // 3-3. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
+    // 3-2. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
     if (this.projectInfo.usePrettier) {
       const sPath = this.FileUtil.makePath(sWorkPath, '.prettierrc.yaml')
 

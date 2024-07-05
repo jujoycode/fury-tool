@@ -123,7 +123,7 @@ export class Logger {
         this.formatMessage(
           '\x1b[31m',
           'ERROR_D',
-          `{\n  type: '${errorContext.title}'\n  reason: '${errorContext.message}'\n}`
+          `{\n  type: '${errorContext.title}'\n  reason: '${errorContext.context}'\n}`
         )
       )
     }

@@ -1,0 +1,13 @@
+{
+  "name": "moduleName",
+  "version": "1.0.0",
+  "description": "JavaScritp Project setup from fury",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}

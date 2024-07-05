@@ -3,11 +3,18 @@ import { Exception } from './exception'
 const title = 'OperationFail'
 
 export class OperationFailException extends Exception {
-  constructor(message: string) {
-    super(title, message)
+  constructor(message: string, context?: Error) {
+    super(title, message, context)
 
-    this.logger.error(`${message} 실패했습니다.`)
+    this.logger.error(`${this.convertMessage(message as any)} Faild.`)
   }
 
-  private convertMessage() {}
+  private convertMessage(message: 'projectBuild' | 'createDirectory') {
+    const convertTemplate = {
+      projectBuild: 'Project Build',
+      createDirectory: 'Create Project Directory'
+    }
+
+    return convertTemplate[message]
+  }
 }
