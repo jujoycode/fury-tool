@@ -1,0 +1,18 @@
+{
+  "default": {
+    "src": {
+      "index": "js",
+      "utils": {
+        "projectUtil": "js"
+      }
+    }
+  },
+  "typescript": {
+    "src": {
+      "index": "ts",
+      "utils": {
+        "projectUtil": "ts"
+      }
+    }
+  }
+}
