@@ -1,6 +1,4 @@
 import { Factory, ReactProjectFactory, VueProjectFactory, ExpressProjectFactory } from './'
-import { OperationFailException } from '../exception'
-
 import { jsPackageJson, tsPackageJson, tsConfig, baseStructure } from '../templates'
 
 import { ProjectInfo } from '../interfaces/project'
@@ -28,31 +26,20 @@ export class ProjectFactory extends Factory {
     )
 
     // 2. 설정 파일 생성
-    await this.FileUtil.createFile(
-      sWorkPath,
-      'package.json',
-      JSON.stringify(jsPackageJson, null, 2)
-    )
+    const pacakge = this.projectInfo.useTypescript ? tsPackageJson : jsPackageJson
+    const structure = this.projectInfo.useTypescript
+      ? baseStructure.typescript
+      : baseStructure.default
+
+    pacakge.name = this.projectInfo.projectName
+
+    await this.FileUtil.createFile(sWorkPath, 'package.json', JSON.stringify(pacakge, null, 2))
     if (this.projectInfo.useTypescript) {
-      await this.FileUtil.createFile(
-        sWorkPath,
-        'tsconfig.json',
-        JSON.stringify(tsPackageJson, null, 2)
-      )
+      await this.FileUtil.createFile(sWorkPath, 'tsconfig.json', JSON.stringify(tsConfig, null, 2))
     }
 
     // 3. 프로젝트 기본 구조 생성
-    // 3-1. src 폴더 생성
-    const sSrcPath = await this.FileUtil.createDirectory(sWorkPath, 'src')
-
-    // 3-2. index.js 파일 생성
-    await this.FileUtil.createFile(sSrcPath, 'index.js', '')
-
-    // 3-3. utils 폴더 생성
-    const sUtilPath = await this.FileUtil.createDirectory(sWorkPath, 'utils')
-
-    // 3-4. projectUtil.js 파일 생성
-    await this.FileUtil.createFile(sUtilPath, 'projectUtil.js', '')
+    await this.FileUtil.createStructure(structure, sWorkPath)
   }
 
   /**
