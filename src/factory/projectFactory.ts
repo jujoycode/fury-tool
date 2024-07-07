@@ -25,21 +25,36 @@ export class ProjectFactory extends Factory {
       this.projectInfo.projectName
     )
 
-    // 2. 설정 파일 생성
-    const pacakge = this.projectInfo.useTypescript ? tsPackageJson : jsPackageJson
-    const structure = this.projectInfo.useTypescript
+    // 2. 프로젝트 구조 생성
+    const packageJson = this.projectInfo.useTypescript ? tsPackageJson : jsPackageJson
+    const structureJson = this.projectInfo.useTypescript
       ? baseStructure.typescript
       : baseStructure.default
 
-    pacakge.name = this.projectInfo.projectName
+    packageJson.name = this.projectInfo.projectName
 
-    await this.FileUtil.createFile(sWorkPath, 'package.json', JSON.stringify(pacakge, null, 2))
+    // 2-1. package.json 생성
+    await this.FileUtil.createFile(sWorkPath, 'package.json', JSON.stringify(packageJson, null, 2))
     if (this.projectInfo.useTypescript) {
+      // 2-2. tsconfig.json 생성
       await this.FileUtil.createFile(sWorkPath, 'tsconfig.json', JSON.stringify(tsConfig, null, 2))
     }
 
-    // 3. 프로젝트 기본 구조 생성
-    await this.FileUtil.createStructure(structure, sWorkPath)
+    // 2-3. 프로젝트 구조 생성
+    await this.FileUtil.createStructure(structureJson, sWorkPath)
+
+    // 2-4. 프로젝트 경로 저장
+    this.setWorkDir(sWorkPath)
+  }
+
+  /**
+   * @name setup
+   * @desc return the project path
+   * @example
+   * factory.getWorkDir();
+   */
+  public getWorkDir(): string {
+    return this.sWorkDir
   }
 
   /**

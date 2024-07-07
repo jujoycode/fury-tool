@@ -55,7 +55,7 @@ export class FileUtil {
       // 값이 객체인 경우 폴더 생성 및 재귀 호출
       if (typeof value === 'object') {
         await this.createDirectory(sPath, key);
-        await FileUtil.createStructure(value, sPath);
+        await FileUtil.createStructure(value, this.makePath(sPath, key));
       }
     }
   }

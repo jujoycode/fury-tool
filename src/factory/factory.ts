@@ -25,6 +25,14 @@ export abstract class Factory {
   }
 
   /**
+   * @name getWorkDir
+   * @desc Abstract method to get project path.
+   * @example
+   * await factory.getWorkDir();
+   */
+  abstract getWorkDir(): string
+
+  /**
    * @name setup
    * @desc Abstract method to setup the project.
    * @example

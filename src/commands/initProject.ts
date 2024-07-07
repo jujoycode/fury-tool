@@ -10,6 +10,7 @@ import { ProjectInfo } from '../interfaces/project'
  */
 export class InitProject extends Command {
   private projectInfo: ProjectInfo = {} as ProjectInfo
+  private sWorkDir: string = ''
 
   /**
    * @name prepare
@@ -52,6 +53,9 @@ export class InitProject extends Command {
 
     // 2. Project Setup
     await factory.setup()
+
+    // 3. get project path
+    this.sWorkDir = factory.getWorkDir()
   }
 
   /**
@@ -61,27 +65,25 @@ export class InitProject extends Command {
    * await command.finalize();
    */
   async finalize(): Promise<void> {
-    const sWorkPath = ''
-
     // 3. 후처리
     // -------------------------------------------------------
     // 3-1. Git 사용 여부에 따라 Init 수행
     if (this.projectInfo.useGit) {
       // 3-1-1. .gitignore 파일 생성
-      await this.FileUtil.createFile(sWorkPath, '.gitignore', 'node_modules')
+      await this.FileUtil.createFile(this.sWorkDir, '.gitignore', 'node_modules')
 
-      // 3-1-2. git init 수행 (git이 없을 경우 logging 후 진행)
+      // 3-1-2. git init 수행 (git이 없을 경우 log.error 후 진행)
 
       // 3-1-3. git remote add origin 수행
     }
 
     // 3-2. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
     if (this.projectInfo.usePrettier) {
-      const sPath = this.FileUtil.makePath(sWorkPath, '.prettierrc.yaml')
+      const sPath = this.FileUtil.makePath(this.sWorkDir, '.prettierrc.yaml')
 
       const isExist = await this.FileUtil.checkExist(sPath)
       if (!isExist) {
-        await this.FileUtil.createFile(sWorkPath, '.prettierrc.yaml', '')
+        await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
       }
     }
 
