@@ -1,4 +1,5 @@
 import { UpdateNotifier } from './updateNotifier'
 import { Prompt, PromptObject } from './prompt'
+import { Spinner } from './spinner'
 
-export { UpdateNotifier, Prompt, type PromptObject }
+export { UpdateNotifier, Prompt, type PromptObject, Spinner }

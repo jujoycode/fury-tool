@@ -38,6 +38,17 @@ export class InitProject extends Command {
       Object.assign(this.projectInfo, response)
     }
 
+    // 0-3. git remote URL 정보 취득 (prompt)
+    if (this.projectInfo.useGit) {
+      const response = await this.Prompt.call(USE_GIT)
+      this.CommonUtil.validateRequireFields(
+        response,
+        USE_GIT.map(prompt => String(prompt.name))
+      )
+
+      Object.assign(this.projectInfo, response)
+    }
+
     this.Logger.space()
   }
 
@@ -65,26 +76,31 @@ export class InitProject extends Command {
    * await command.finalize();
    */
   async finalize(): Promise<void> {
+    const run = this.Spinner.get()
+
     // 3. 후처리
     // -------------------------------------------------------
     // 3-1. Git 사용 여부에 따라 Init 수행
     if (this.projectInfo.useGit) {
+      const gitRunner = run.start('Setup Git...')
+
       // 3-1-1. .gitignore 파일 생성
       await this.FileUtil.createFile(this.sWorkDir, '.gitignore', 'node_modules')
 
       // 3-1-2. git init 수행 (git이 없을 경우 log.error 후 진행)
 
       // 3-1-3. git remote add origin 수행
+
+      gitRunner.succeed('Setup Git')
     }
 
     // 3-2. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
     if (this.projectInfo.usePrettier) {
-      const sPath = this.FileUtil.makePath(this.sWorkDir, '.prettierrc.yaml')
+      const prtRunner = run.start('Setup Prettier...')
 
-      const isExist = await this.FileUtil.checkExist(sPath)
-      if (!isExist) {
-        await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
-      }
+      await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
+
+      prtRunner.succeed('Setup Prettier')
     }
 
     // -------------------------------------------------------

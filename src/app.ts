@@ -3,7 +3,7 @@
 import { Command as Commander } from 'commander'
 
 import { InitProject } from './commands'
-import { Prompt, UpdateNotifier } from './lib'
+import { Prompt, UpdateNotifier, Spinner } from './lib'
 import { Logger, CommonUtil, FileUtil } from './utils'
 
 import { FuryOption, LogLevel } from './interfaces/project'
@@ -18,6 +18,7 @@ import pkg from '../package.json'
 class App {
   private program: Commander
   private prompt: Prompt
+  private spinner: Spinner
   private logger: Logger
 
   /**
@@ -28,6 +29,7 @@ class App {
     this.prompt = new Prompt()
     UpdateNotifier.call(pkg)
 
+    this.spinner = Spinner.getInstance()
     this.logger = Logger.getInstance(logLevel as keyof LogLevel)
 
     this.configureCommands()
@@ -64,6 +66,7 @@ class App {
     const objCommandParams = {
       prompt: this.prompt,
       logger: this.logger,
+      spinner: this.spinner,
       utils: { CommonUtil, FileUtil }
     }
 
