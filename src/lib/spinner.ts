@@ -1,16 +1,15 @@
+import { NoDataException } from '../exception'
+
+import type { Ora } from '../interfaces/spinner'
+
 export class Spinner {
   private static instance: Spinner
-  private ora: any
+  private ora: Ora | null = null
 
   protected constructor() {
-    // 동적 import를 사용하여 ora 모듈을 가져옵니다.
-    import('ora')
-      .then(module => {
-        this.ora = module.default()
-      })
-      .catch(err => {
-        console.error(`Failed to load 'ora' module:`, err)
-      })
+    import('ora').then(module => {
+      this.ora = module.default({ spinner: 'bouncingBar' })
+    })
   }
 
   /**
@@ -27,6 +26,9 @@ export class Spinner {
   }
 
   public get() {
+    if (!this.ora) {
+      throw new NoDataException('Spinner instance is not initialized yet.')
+    }
     return this.ora
   }
 }

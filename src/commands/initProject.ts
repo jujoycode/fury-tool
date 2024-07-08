@@ -76,27 +76,38 @@ export class InitProject extends Command {
    * await command.finalize();
    */
   async finalize(): Promise<void> {
-    const run = this.Spinner.get()
+    const spinner = this.Spinner.get()
 
     // 3. 후처리
     // -------------------------------------------------------
     // 3-1. Git 사용 여부에 따라 Init 수행
     if (this.projectInfo.useGit) {
-      const gitRunner = run.start('Setup Git...')
+      const gitRunner = spinner.start('Setup Git...')
 
       // 3-1-1. .gitignore 파일 생성
       await this.FileUtil.createFile(this.sWorkDir, '.gitignore', 'node_modules')
 
-      // 3-1-2. git init 수행 (git이 없을 경우 log.error 후 진행)
+      try {
+        // 3-1-2. git init 수행
+        await this.Launcher.run('git', ['init'], this.sWorkDir)
 
-      // 3-1-3. git remote add origin 수행
+        // 3-1-3. git remote add origin 수행
+        await this.Launcher.run(
+          'git',
+          ['remote', 'add', 'origin', this.projectInfo.remoteUrl!],
+          this.sWorkDir
+        )
 
-      gitRunner.succeed('Setup Git')
+        gitRunner.succeed('Setup Git')
+      } catch (error: any) {
+        gitRunner.fail('Setup Git')
+        this.Logger.error(error.message)
+      }
     }
 
     // 3-2. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
     if (this.projectInfo.usePrettier) {
-      const prtRunner = run.start('Setup Prettier...')
+      const prtRunner = spinner.start('Setup Prettier...')
 
       await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
 
@@ -105,6 +116,11 @@ export class InitProject extends Command {
 
     // -------------------------------------------------------
     // 4. Package 설치
+    const pkgRunner = spinner.start('Install...')
+
+    await this.Launcher.run('pnpm', ['install'], this.sWorkDir)
+
+    pkgRunner.succeed('Install')
   }
 
   /**
