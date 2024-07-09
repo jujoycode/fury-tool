@@ -2,7 +2,7 @@
 
 import { Command as Commander } from 'commander'
 
-import { InitProject } from './commands'
+import { InitProject, GitManage } from './commands'
 import { Prompt, UpdateNotifier, Spinner, Launcher } from './lib'
 import { Logger, CommonUtil, FileUtil } from './utils'
 
@@ -43,7 +43,7 @@ class App {
    * @example
    * this.configureCommands();
    */
-  private async configureCommands() {
+  private configureCommands() {
     this.program
       .name(pkg.name)
       .option('no option', 'Start create project')
@@ -75,7 +75,7 @@ class App {
 
     switch (true) {
       case options.git: {
-        return undefined
+        return new GitManage(objCommandParams)
       }
       default: {
         return new InitProject(objCommandParams)

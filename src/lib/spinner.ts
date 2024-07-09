@@ -7,9 +7,13 @@ export class Spinner {
   private ora: Ora | null = null
 
   protected constructor() {
-    import('ora').then(module => {
-      this.ora = module.default({ spinner: 'bouncingBar' })
-    })
+    import('ora')
+      .then(module => {
+        this.ora = module.default({ spinner: 'arc' })
+      })
+      .catch(error => {
+        throw new NoDataException(error)
+      })
   }
 
   /**

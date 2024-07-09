@@ -7,7 +7,8 @@
     "fury": "./dist/app.js"
   },
   "scripts": {
-    "build": "rm -rf dist && npx tsc && rm -rf types && node ./scripts/build.mjs",
+    "exportType": "npx tsc",
+    "build": "rm -rf dist && rm -rf types && pnpm exportType && node ./scripts/build.mjs",
     "dev": "node ./dist/app.js"
   },
   "keywords": [],

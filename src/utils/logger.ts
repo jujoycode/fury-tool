@@ -130,6 +130,19 @@ export class Logger {
   }
 
   /**
+   * @name system
+   * @desc Log an system message.
+   * @param {string} message - The log message.
+   * @example
+   * logger.system(exception)
+   */
+  public system(message: string): void {
+    if (this.logLevel >= 0) {
+      console.log(message)
+    }
+  }
+
+  /**
    * @name space
    * @desc Log an Empty Line
    * @example

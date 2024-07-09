@@ -4,6 +4,7 @@ interface FuryOption {
 
 interface ProjectInfo {
   projectName: string
+  packageManager: 'npm' | 'yarn' | 'pnpm'
   useTypescript: boolean
   useFramework: boolean
   useGit: boolean

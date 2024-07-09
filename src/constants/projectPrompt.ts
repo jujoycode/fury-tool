@@ -8,6 +8,16 @@ const PROJECT_INIT_PROMPT: PromptObject[] = [
     initial: 'demo'
   },
   {
+    type: 'select',
+    name: 'packageManager',
+    message: 'Select a package manager:',
+    choices: [
+      { title: '\x1b[31mnpm\x1b[0m', value: 'npm' },
+      { title: '\x1b[34myarn\x1b[0m', value: 'yarn' },
+      { title: '\x1b[33mpnpm\x1b[0m', value: 'pnpm' }
+    ]
+  },
+  {
     type: 'confirm',
     name: 'useTypescript',
     message: 'Use TypeScript?',

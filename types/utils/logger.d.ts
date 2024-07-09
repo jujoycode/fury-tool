@@ -65,6 +65,14 @@ export declare class Logger {
      */
     errorD(errorContext: Exception): void;
     /**
+     * @name system
+     * @desc Log an system message.
+     * @param {string} message - The log message.
+     * @example
+     * logger.system(exception)
+     */
+    system(message: string): void;
+    /**
      * @name space
      * @desc Log an Empty Line
      * @example

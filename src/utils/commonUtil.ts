@@ -1,4 +1,4 @@
-import { OperationFailException } from '../exception'
+import { NoDataException } from '../exception'
 
 export class CommonUtil {
   constructor() {}
@@ -8,7 +8,7 @@ export class CommonUtil {
       const currentValue = targetObject[key]
 
       if (currentValue === undefined) {
-        throw new OperationFailException(key)
+        throw new NoDataException(key)
       }
 
       return true

@@ -52,7 +52,6 @@ export abstract class Command {
     } catch (errorContext: unknown) {
       const err = errorContext as Exception
       this.Logger.errorD(err)
-
       await this.rollback()
     }
   }

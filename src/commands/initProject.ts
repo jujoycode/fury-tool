@@ -67,6 +67,10 @@ export class InitProject extends Command {
 
     // 3. get project path
     this.sWorkDir = factory.getWorkDir()
+
+    // 4. logging
+    this.Logger.system(`✨ Creating project \x1b[35min\x1b[0m ${this.sWorkDir}`)
+    this.Logger.space()
   }
 
   /**
@@ -82,7 +86,7 @@ export class InitProject extends Command {
     // -------------------------------------------------------
     // 3-1. Git 사용 여부에 따라 Init 수행
     if (this.projectInfo.useGit) {
-      const gitRunner = spinner.start('Setup Git...')
+      const gitRunner = spinner.start('🌴  Setup Git...')
 
       // 3-1-1. .gitignore 파일 생성
       await this.FileUtil.createFile(this.sWorkDir, '.gitignore', 'node_modules')
@@ -98,29 +102,43 @@ export class InitProject extends Command {
           this.sWorkDir
         )
 
-        gitRunner.succeed('Setup Git')
+        gitRunner.succeed('🌴  Setup Git')
       } catch (error: any) {
-        gitRunner.fail('Setup Git')
+        gitRunner.fail()
         this.Logger.error(error.message)
       }
     }
 
     // 3-2. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
     if (this.projectInfo.usePrettier) {
-      const prtRunner = spinner.start('Setup Prettier...')
+      const prtRunner = spinner.start('🎨  Setup Prettier...')
 
       await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
 
-      prtRunner.succeed('Setup Prettier')
+      prtRunner.succeed('🎨  Setup Prettier')
     }
 
     // -------------------------------------------------------
     // 4. Package 설치
-    const pkgRunner = spinner.start('Install...')
+    const pkgRunner = spinner.start('📦  Installing dependencies...')
 
-    await this.Launcher.run('pnpm', ['install'], this.sWorkDir)
+    const output = await this.Launcher.run(
+      this.projectInfo.packageManager,
+      ['install'],
+      this.sWorkDir
+    )
 
-    pkgRunner.succeed('Install')
+    pkgRunner.succeed('📦  Installing dependencies\n')
+    this.Logger.system(output)
+
+    // 5. logging
+    this.Logger.space()
+    this.Logger.system(
+      `🎉  Successfully created project \x1b[33m${this.projectInfo.projectName}\x1b[0m.`
+    )
+    this.Logger.system(
+      `👉  Get started with the following commands:\n    $ \x1b[33mcd\x1b[0m ${this.projectInfo.projectName}\n    $ code .`
+    )
   }
 
   /**

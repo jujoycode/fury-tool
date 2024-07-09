@@ -1,3 +1,4 @@
 import { Command } from './command';
 import { InitProject } from './initProject';
-export { Command, InitProject };
+import { GitManage } from './gitManage';
+export { Command, InitProject, GitManage };
