@@ -59,6 +59,8 @@ export class InitProject extends Command {
    * await command.execute();
    */
   async execute(): Promise<void> {
+    const createRunner = this.Spinner.get().start()
+
     // 1. Factory 생성
     const factory = new ProjectFactory(this.projectInfo).getFactory()
 
@@ -69,7 +71,7 @@ export class InitProject extends Command {
     this.sWorkDir = factory.getWorkDir()
 
     // 4. logging
-    this.Logger.system(`✨ Creating project \x1b[35min\x1b[0m ${this.sWorkDir}`)
+    createRunner.succeed(`✨ Creating project \x1b[35min\x1b[0m ${this.sWorkDir}`)
     this.Logger.space()
   }
 
@@ -80,13 +82,11 @@ export class InitProject extends Command {
    * await command.finalize();
    */
   async finalize(): Promise<void> {
-    const spinner = this.Spinner.get()
-
     // 3. 후처리
     // -------------------------------------------------------
     // 3-1. Git 사용 여부에 따라 Init 수행
     if (this.projectInfo.useGit) {
-      const gitRunner = spinner.start('🌴  Setup Git...')
+      const gitRunner = this.Spinner.get().start('🌴  Setup Git...')
 
       // 3-1-1. .gitignore 파일 생성
       await this.FileUtil.createFile(this.sWorkDir, '.gitignore', 'node_modules')
@@ -111,7 +111,7 @@ export class InitProject extends Command {
 
     // 3-2. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
     if (this.projectInfo.usePrettier) {
-      const prtRunner = spinner.start('🎨  Setup Prettier...')
+      const prtRunner = this.Spinner.get().start('🎨  Setup Prettier...')
 
       await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
 
@@ -120,7 +120,7 @@ export class InitProject extends Command {
 
     // -------------------------------------------------------
     // 4. Package 설치
-    const pkgRunner = spinner.start('📦  Installing dependencies...')
+    const pkgRunner = this.Spinner.get().start('📦  Installing dependencies...')
 
     const output = await this.Launcher.run(
       this.projectInfo.packageManager,

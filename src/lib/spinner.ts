@@ -12,7 +12,7 @@ export class Spinner {
         this.ora = module.default({ spinner: 'arc' })
       })
       .catch(error => {
-        throw new NoDataException(error)
+        throw new NoDataException(error.message)
       })
   }
 

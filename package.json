@@ -1,19 +1,26 @@
 {
   "name": "fury-tool",
   "version": "0.0.1",
-  "description": "CLI tool for JavaScript developers",
+  "description": "Tool that helps developers in a variety of tasks",
   "main": "dist/app.js",
   "bin": {
-    "fury": "./dist/app.js"
+    "fury": "dist/app.js"
   },
+  "types": "types/app.d.ts",
   "scripts": {
     "exportType": "npx tsc",
     "build": "rm -rf dist && rm -rf types && pnpm exportType && node ./scripts/build.mjs",
     "dev": "node ./dist/app.js"
   },
-  "keywords": [],
+  "keywords": [
+    "cli",
+    "git",
+    "Node",
+    "JavaScript",
+    "tool"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@types/prompts": "^2.4.9",
