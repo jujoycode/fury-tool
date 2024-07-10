@@ -11,24 +11,24 @@
 ## Installation
 
 ```bash
-# Locally in your project.
-npm install -D fury-tool
-
-# Or globally
+# npm
 npm install -g fury-tool
+
+# yarn
+yarn global add fury-tool
+
+# pnpm
+pnpm install -g fury-tool
 ```
 
 ## Usage
 
 ```bash
-# When you want create new project with nodejs
+# When you want create new project with fury
 $ fury
 
-# When you want push all changes
-$ fury -pa
-
-# When you want update your 'node_modules' (wip)
-$ fury -up
+# When you want push all changes [WIP]
+$ fury -g # or fury --git
 
 # When you want to access help information
 $ fury -h # or fury --help
@@ -47,10 +47,10 @@ $ fury -V # or fury --version
 
 ## Version History
 
-- 1.1.0
-  - Use `git` through `fury`
-- 1.0.0
-  - `fury` can create Project with `node`
+- 0.0.1
+  - `fury` can create Project
+    - `javascript`
+    - `typescript`
 
 ## License
 
