@@ -48,13 +48,20 @@ class App {
       .name(pkg.name)
       .option('no option', 'Start create project')
       .option('-g, --git', 'Start git management', false)
+      .option('-m, --migration', 'Start migration data', false)
+      .option('-s, --setting', 'Edit fury setting', false)
       .version(pkg.version)
       .description(pkg.description)
       .action(async (options: FuryOption) => {
         const command = this.getCommand(options)
 
         if (command) {
+          console.time('🔥')
+
           await command.invoke()
+
+          this.logger.space()
+          console.timeEnd('🔥')
         }
       })
   }
@@ -76,6 +83,12 @@ class App {
     switch (true) {
       case options.git: {
         return new GitManage(objCommandParams)
+      }
+      case options.migration: {
+        break
+      }
+      case options.setting: {
+        break
       }
       default: {
         return new InitProject(objCommandParams)

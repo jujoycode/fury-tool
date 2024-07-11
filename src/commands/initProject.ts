@@ -20,8 +20,8 @@ export class InitProject extends Command {
    */
   async prepare(): Promise<void> {
     // 0. Project 생성을 위한 기본 정보 취득 (prompt)
-    const projectInitResponses = await this.Prompt.call(PROJECT_INIT_PROMPT)
-    Object.assign(this.projectInfo, projectInitResponses)
+    const projectInitResponse = await this.Prompt.call(PROJECT_INIT_PROMPT)
+    Object.assign(this.projectInfo, projectInitResponse)
 
     // 0-1. 필수값 검증
     const requiredField = PROJECT_INIT_PROMPT.map(prompt => String(prompt.name))
@@ -59,7 +59,7 @@ export class InitProject extends Command {
    * await command.execute();
    */
   async execute(): Promise<void> {
-    const createRunner = this.Spinner.get().start()
+    const createRunner = this.Spinner.get().start('Creating project...')
 
     // 1. Factory 생성
     const factory = new ProjectFactory(this.projectInfo).getFactory()

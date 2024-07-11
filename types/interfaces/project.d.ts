@@ -1,5 +1,7 @@
 interface FuryOption {
     git: boolean;
+    migration: boolean;
+    setting: boolean;
 }
 interface ProjectInfo {
     projectName: string;

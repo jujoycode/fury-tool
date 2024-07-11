@@ -4,8 +4,7 @@ import { join } from 'path'
 import { OperationFailException } from '../exception'
 
 export class FileUtil {
-  constructor() { }
-
+  constructor() {}
 
   static makePath(sRootPath: string, sTargetPath: string): string {
     return join(sRootPath, sTargetPath)
@@ -45,17 +44,17 @@ export class FileUtil {
 
   static async createStructure(folderStructure: Record<string, any>, sPath: string): Promise<void> {
     for (const key in folderStructure) {
-      const value = folderStructure[key];
+      const value = folderStructure[key]
 
       // 값이 문자열인 경우 파일 생성
       if (typeof value === 'string') {
-        await this.createFile(sPath, `${key}.${value}`, '');  // 빈 파일 생성
+        await this.createFile(sPath, `${key}.${value}`, '') // 빈 파일 생성
       }
 
       // 값이 객체인 경우 폴더 생성 및 재귀 호출
       if (typeof value === 'object') {
-        await this.createDirectory(sPath, key);
-        await FileUtil.createStructure(value, this.makePath(sPath, key));
+        await this.createDirectory(sPath, key)
+        await FileUtil.createStructure(value, this.makePath(sPath, key))
       }
     }
   }
