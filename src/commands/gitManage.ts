@@ -1,6 +1,6 @@
 import { Command } from './'
 import { GIT_INIT_PROMPT, CONFIRM_ADDITION_SETTING } from '../constants'
-import { GitException } from '../exception'
+import { GitException, AlreadyExistException } from '../exception'
 
 import { GitInfo } from '../interfaces/git'
 
@@ -20,7 +20,7 @@ export class GitManage extends Command {
 
     // 1. init을 제외한 커맨드에서 validation 수행
     if (this.gitInfo.subCommand !== 'init') {
-      await this.checkGitFile()
+      await this.checkValidation()
     }
   }
 
@@ -57,12 +57,19 @@ export class GitManage extends Command {
   }
 
   /**
-   * @name checkGitFile
+   * @name checkValidation
    * @desc Checks for the existence of the .git directory and throws an error if it does not exist.
-   * @example await this.checkGitFile();
+   * @example await this.checkValidation();
    */
-  private async checkGitFile() {
+  private async checkValidation() {
     const checkRunner = this.Spinner.get().start('🔎  Verifying project setup...')
+
+    // 0. git 설치 여부 검증
+    try {
+      await this.Launcher.run('git', ['-v'])
+    } catch (error) {
+      throw new GitException('notInstall')
+    }
 
     // 1. .git 파일 존재 검증
     const sPath = this.FileUtil.makePath(this.sWorkDir, '.git')
@@ -82,11 +89,16 @@ export class GitManage extends Command {
    * @example await this.initGit();
    */
   private async initGit() {
-    // 0. git이 설치되어있는지 확인
+    // 0. git이 설치되어있지 않거나 .git이 이미 존재하는 프로젝트라면 예외 처리
     try {
       await this.Launcher.run('git', ['-v'])
     } catch (error) {
       throw new GitException('notInstall')
+    }
+
+    const sPath = this.FileUtil.makePath(this.sWorkDir, '.git')
+    if (await this.FileUtil.checkExist(sPath)) {
+      throw new AlreadyExistException('.git')
     }
 
     // 1. git init 명령어 수행
@@ -100,12 +112,15 @@ export class GitManage extends Command {
     )
     Object.assign(this.gitInfo, response)
 
-    // 2-1. commit 수행
-    // if (this.gitInfo.useFirstCommit) {
-    //   await this.Launcher.run('git', ['add', '.'])
-    //   await this.Launcher.run('git', ['commit', '-m', ':sparkles: Project Initial'])
-    //   await this.Launcher.run('git', ['push'])
-    // }
+    // 3. remote origin 설정
+    this.Launcher.run('git', ['remote', 'add', 'origin', this.gitInfo.remoteUrl])
+
+    if (this.gitInfo.useFirstCommit) {
+      // 4. first commit 수행
+      await this.Launcher.run('git', ['add', '.'])
+      await this.Launcher.run('git', ['commit', '-m', ':sparkles: Project Initial'])
+      await this.Launcher.run('git', ['push', '-u', 'origin'])
+    }
   }
 
   /**
