@@ -1,6 +1,6 @@
 {
   "name": "fury-tool",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tool that helps developers in a variety of tasks",
   "main": "dist/app.js",
   "bin": {
