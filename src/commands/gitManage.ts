@@ -46,12 +46,16 @@ export class GitManage extends Command {
 
   async finalize(): Promise<void> {}
 
-  async rollback(): Promise<void> {}
+  async rollback(): Promise<void> {
+    // 99. 에러가 발생한 지점 파악
+    // 99-1. Roollback 사전 준비
+    // 99-2. Rollback 수행
+  }
 
   /**
    * @name checkGitFile
-   * @desc .git 파일 유무 확인 후 존재하지 않을 시 에러 처리
-   * @example await this.checkGitFile()
+   * @desc Checks for the existence of the .git directory and throws an error if it does not exist.
+   * @example await this.checkGitFile();
    */
   private async checkGitFile() {
     const checkRunner = this.Spinner.get().start('🔎  Verifying project setup...')
@@ -66,5 +70,44 @@ export class GitManage extends Command {
     }
 
     checkRunner.succeed('Project setup verified.')
+  }
+
+  /**
+   * @name initGit
+   * @desc Performs Git initialization.
+   * @example await this.initGit();
+   */
+  private async initGit() {
+    // 0. git이 설치되어있는지 확인
+    // 1. git init 명령어 수행
+    // 2. first commit 여부 확인
+    // 2-1. commit 수행
+  }
+
+  /**
+   * @name pushGit
+   * @desc Performs Git push operation.
+   * @example await this.pushGit();
+   */
+  private async pushGit() {
+    // Logic for Git push operation
+  }
+
+  /**
+   * @name pullGit
+   * @desc Performs Git pull operation.
+   * @example await this.pullGit();
+   */
+  private async pullGit() {
+    // Logic for Git pull operation
+  }
+
+  /**
+   * @name mergeGit
+   * @desc Performs Git merge operation.
+   * @example await this.mergeGit();
+   */
+  private async mergeGit() {
+    // Logic for Git merge operation
   }
 }

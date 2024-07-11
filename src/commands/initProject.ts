@@ -1,6 +1,7 @@
 import { Command } from './'
 import { ProjectFactory } from '../factory'
 import { PROJECT_INIT_PROMPT, USE_FRAMEWORK, USE_GIT } from '../constants'
+import { markdownContent } from '../templates'
 
 import { ProjectInfo } from '../interfaces/project'
 
@@ -84,18 +85,34 @@ export class InitProject extends Command {
   async finalize(): Promise<void> {
     // 3. 후처리
     // -------------------------------------------------------
-    // 3-1. Git 사용 여부에 따라 Init 수행
+    // 3-1. README.md 생성
+    const readMeRunner = this.Spinner.get().start('📝  Write README.md...')
+
+    try {
+      await this.FileUtil.createFile(
+        this.sWorkDir,
+        'README.md',
+        markdownContent.replace(/{{projectName}}/g, this.projectInfo.projectName)
+      )
+
+      readMeRunner.succeed('📝  Write README.md')
+    } catch (error: any) {
+      readMeRunner.fail()
+      this.Logger.error(error.message)
+    }
+
+    // 3-2. Git 사용 여부에 따라 Init 수행
     if (this.projectInfo.useGit) {
       const gitRunner = this.Spinner.get().start('🌴  Setup Git...')
 
-      // 3-1-1. .gitignore 파일 생성
+      // 3-2-1. .gitignore 파일 생성
       await this.FileUtil.createFile(this.sWorkDir, '.gitignore', 'node_modules')
 
       try {
-        // 3-1-2. git init 수행
+        // 3-2-2. git init 수행
         await this.Launcher.run('git', ['init'], this.sWorkDir)
 
-        // 3-1-3. git remote add origin 수행
+        // 3-2-3. git remote add origin 수행
         await this.Launcher.run(
           'git',
           ['remote', 'add', 'origin', this.projectInfo.remoteUrl!],
@@ -109,7 +126,7 @@ export class InitProject extends Command {
       }
     }
 
-    // 3-2. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
+    // 3-3. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
     if (this.projectInfo.usePrettier) {
       const prtRunner = this.Spinner.get().start('🎨  Setup Prettier...')
 
@@ -128,7 +145,7 @@ export class InitProject extends Command {
       this.sWorkDir
     )
 
-    pkgRunner.succeed('📦  Installing dependencies\n')
+    pkgRunner.succeed('📦  Install dependencies\n')
     this.Logger.system(output)
 
     // 5. logging

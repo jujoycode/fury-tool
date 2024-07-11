@@ -8,8 +8,32 @@ export declare class GitManage extends Command {
     rollback(): Promise<void>;
     /**
      * @name checkGitFile
-     * @desc .git 파일 유무 확인 후 존재하지 않을 시 에러 처리
-     * @example await this.checkGitFile()
+     * @desc Checks for the existence of the .git directory and throws an error if it does not exist.
+     * @example await this.checkGitFile();
      */
     private checkGitFile;
+    /**
+     * @name initGit
+     * @desc Performs Git initialization.
+     * @example await this.initGit();
+     */
+    private initGit;
+    /**
+     * @name pushGit
+     * @desc Performs Git push operation.
+     * @example await this.pushGit();
+     */
+    private pushGit;
+    /**
+     * @name pullGit
+     * @desc Performs Git pull operation.
+     * @example await this.pullGit();
+     */
+    private pullGit;
+    /**
+     * @name mergeGit
+     * @desc Performs Git merge operation.
+     * @example await this.mergeGit();
+     */
+    private mergeGit;
 }
