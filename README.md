@@ -30,6 +30,9 @@ $ fury
 # When you want push all changes [WIP]
 $ fury -g # or fury --git
 
+# When you want to migrate DB [Next]
+$ fury -m # or fury --migration
+
 # When you want to access help information
 $ fury -h # or fury --help
 
