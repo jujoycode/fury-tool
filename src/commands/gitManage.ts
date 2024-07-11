@@ -119,7 +119,7 @@ export class GitManage extends Command {
       // 4. first commit 수행
       await this.Launcher.run('git', ['add', '.'])
       await this.Launcher.run('git', ['commit', '-m', ':sparkles: Project Initial'])
-      await this.Launcher.run('git', ['push', '-u', 'origin'])
+      await this.Launcher.run('git', ['push', '-u', 'origin', 'master'])
     }
   }
 

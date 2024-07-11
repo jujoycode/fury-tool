@@ -7,11 +7,11 @@ export declare class GitManage extends Command {
     finalize(): Promise<void>;
     rollback(): Promise<void>;
     /**
-     * @name checkGitFile
+     * @name checkValidation
      * @desc Checks for the existence of the .git directory and throws an error if it does not exist.
-     * @example await this.checkGitFile();
+     * @example await this.checkValidation();
      */
-    private checkGitFile;
+    private checkValidation;
     /**
      * @name initGit
      * @desc Performs Git initialization.
