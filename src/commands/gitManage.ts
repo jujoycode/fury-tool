@@ -27,18 +27,22 @@ export class GitManage extends Command {
   async execute(): Promise<void> {
     switch (this.gitInfo.subCommand) {
       case 'init': {
+        await this.initGit()
         break
       }
 
       case 'push': {
+        await this.pushGit()
         break
       }
 
       case 'pull': {
+        await this.pullGit()
         break
       }
 
       case 'merge': {
+        await this.mergeGit()
         break
       }
     }
