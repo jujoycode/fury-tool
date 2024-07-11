@@ -1,6 +1,6 @@
 {
-  "name": "@jujoycode/fury-tool",
-  "version": "0.1.0",
+  "name": "fury-tool",
+  "version": "0.1.1",
   "description": "Tool that helps developers in a variety of tasks",
   "main": "dist/app.js",
   "bin": {
@@ -30,9 +30,6 @@
     "url": "https://github.com/jujoycode/fury-tool/issues"
   },
   "homepage": "https://github.com/jujoycode/fury-tool?tab=readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@types/prompts": "^2.4.9",
