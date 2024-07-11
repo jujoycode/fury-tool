@@ -25,7 +25,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://www.npmjs.com/package/fury-tool"
+    "registry": "https://registry.npmjs.org/"
   },
   "author": "",
   "license": "MIT",
