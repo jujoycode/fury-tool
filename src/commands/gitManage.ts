@@ -1,5 +1,5 @@
 import { Command } from './'
-import { GIT_INIT_PROMPT } from '../constants'
+import { GIT_INIT_PROMPT, CONFIRM_ADDITION_SETTING } from '../constants'
 import { GitException } from '../exception'
 
 import { GitInfo } from '../interfaces/git'
@@ -83,9 +83,29 @@ export class GitManage extends Command {
    */
   private async initGit() {
     // 0. git이 설치되어있는지 확인
+    try {
+      await this.Launcher.run('git', ['-v'])
+    } catch (error) {
+      throw new GitException('notInstall')
+    }
+
     // 1. git init 명령어 수행
-    // 2. first commit 여부 확인
+    await this.Launcher.run('git', ['init'])
+
+    // 2. remote repo 추가, first commit 수행 여부 확인
+    const response = await this.Prompt.call(CONFIRM_ADDITION_SETTING)
+    this.CommonUtil.validateRequireFields(
+      response,
+      CONFIRM_ADDITION_SETTING.map(prompt => String(prompt.name))
+    )
+    Object.assign(this.gitInfo, response)
+
     // 2-1. commit 수행
+    // if (this.gitInfo.useFirstCommit) {
+    //   await this.Launcher.run('git', ['add', '.'])
+    //   await this.Launcher.run('git', ['commit', '-m', ':sparkles: Project Initial'])
+    //   await this.Launcher.run('git', ['push'])
+    // }
   }
 
   /**

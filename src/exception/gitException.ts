@@ -8,9 +8,10 @@ export class GitException extends Exception {
     this.logger.error(`${this.convertMessage(message as any)}.`)
   }
 
-  private convertMessage(message: 'init') {
+  private convertMessage(message: 'init' | 'notInstall') {
     const convertTemplate = {
-      init: 'Not a git repository (.git)'
+      init: 'Not a git repository (.git)',
+      notInstall: 'Git is not installed'
     }
 
     return convertTemplate[message]
