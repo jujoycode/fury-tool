@@ -20,6 +20,12 @@
     "JavaScript",
     "tool"
   ],
+  "repository": {
+    "url": "https://github.com/jujoycode/fury-tool"
+  },
+  "publishConfig": {
+    "registry": "https://www.npmjs.com/package/fury-tool"
+  },
   "author": "",
   "license": "MIT",
   "devDependencies": {
