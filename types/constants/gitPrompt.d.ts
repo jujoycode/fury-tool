@@ -1,4 +1,5 @@
 import type { PromptObject } from '../lib';
 declare const GIT_INIT_PROMPT: PromptObject[];
-declare const CONFIRM_ADDITION_SETTING: PromptObject[];
-export { GIT_INIT_PROMPT, CONFIRM_ADDITION_SETTING };
+declare const INIT_SETTING: PromptObject[];
+declare const COMMIT_INFO: PromptObject[];
+export { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO };

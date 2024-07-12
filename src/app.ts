@@ -85,10 +85,10 @@ class App {
         return new GitManage(objCommandParams)
       }
       case options.migration: {
-        break
+        return
       }
       case options.setting: {
-        break
+        return
       }
       default: {
         return new InitProject(objCommandParams)

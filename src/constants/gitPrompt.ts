@@ -9,12 +9,13 @@ const GIT_INIT_PROMPT: PromptObject[] = [
       { title: 'Init', value: 'init' },
       { title: 'Commit & Push', value: 'push' },
       { title: 'Pull', value: 'pull', disabled: true },
-      { title: 'Merge', value: 'merge', disabled: true }
+      { title: 'Merge', value: 'merge', disabled: true },
+      { title: 'Branch Manage', value: 'brnach', disabled: true }
     ]
   }
 ]
 
-const CONFIRM_ADDITION_SETTING: PromptObject[] = [
+const INIT_SETTING: PromptObject[] = [
   {
     type: 'text',
     name: 'remoteUrl',
@@ -41,4 +42,47 @@ const CONFIRM_ADDITION_SETTING: PromptObject[] = [
   }
 ]
 
-export { GIT_INIT_PROMPT, CONFIRM_ADDITION_SETTING }
+const COMMIT_INFO: PromptObject[] = [
+  {
+    type: 'select',
+    name: 'commitType',
+    message: 'Select a type of commit: ',
+    choices: [
+      { title: '🚧 - Work in Progress', value: ':construction:' },
+      { title: '✨ - New Feature', value: ':sparkles:' },
+      { title: '🐛 - Bug Fix', value: ':bug:' },
+      { title: '🔨 - Refactor Code', value: ':hammer:' },
+      { title: '⚡️ - Performance', value: ':zap:' },
+      { title: '💄 - Style', value: ':lipstick:' },
+      { title: '➕ - New Dependency', value: ':heavy_plus_sign:' },
+      { title: '📝 - Documentation', value: ':memo:' },
+      { title: '✅ - Tests', value: ':white_check_mark:' },
+      { title: '🏗️  - Build', value: ':building_construction:' },
+      { title: '🚀 - Deploying', value: ':rocket:' },
+      { title: '👷 - CI/CD', value: ':construction_worker:' },
+      { title: '🐌 - Chore', value: '🐌' }
+    ]
+  },
+  {
+    type: 'text',
+    name: 'commitMessage',
+    message: 'Enter commit message: ',
+    validate: (param: string) => {
+      if (param !== '') {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  {
+    type: 'toggle',
+    name: 'pushPermission',
+    active: 'yes',
+    inactive: 'no',
+    initial: true,
+    message: 'Do you want to push to remote repo?: '
+  }
+]
+
+export { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO }

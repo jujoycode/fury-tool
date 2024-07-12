@@ -1,5 +1,5 @@
 import { Command } from './'
-import { GIT_INIT_PROMPT, CONFIRM_ADDITION_SETTING } from '../constants'
+import { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO } from '../constants'
 import { GitException, AlreadyExistException } from '../exception'
 
 import { GitInfo } from '../interfaces/git'
@@ -45,10 +45,17 @@ export class GitManage extends Command {
         await this.mergeGit()
         break
       }
+
+      case 'branch': {
+        await this.branchManage()
+        break
+      }
     }
   }
 
-  async finalize(): Promise<void> {}
+  async finalize(): Promise<void> {
+    //NOTE: -. gitManage에선 굳이 필요한가?
+  }
 
   async rollback(): Promise<void> {
     // 99. 에러가 발생한 지점 파악
@@ -104,11 +111,11 @@ export class GitManage extends Command {
     // 1. git init 명령어 수행
     await this.Launcher.run('git', ['init'])
 
-    // 2. remote repo 추가, first commit 수행 여부 확인
-    const response = await this.Prompt.call(CONFIRM_ADDITION_SETTING)
+    // 2. 관련 정보 취득 (prompt)
+    const response = await this.Prompt.call(INIT_SETTING)
     this.CommonUtil.validateRequireFields(
       response,
-      CONFIRM_ADDITION_SETTING.map(prompt => String(prompt.name))
+      INIT_SETTING.map(prompt => String(prompt.name))
     )
     Object.assign(this.gitInfo, response)
 
@@ -129,7 +136,25 @@ export class GitManage extends Command {
    * @example await this.pushGit();
    */
   private async pushGit() {
-    // Logic for Git push operation
+    // 1. commit 관련 정보 취득 (prompt)
+    const response = await this.Prompt.call(COMMIT_INFO)
+    this.CommonUtil.validateRequireFields(
+      response,
+      COMMIT_INFO.map(prompt => String(prompt.name))
+    )
+    Object.assign(this.gitInfo, response)
+
+    // 2. Changes를 Staged로 이관
+    await this.Launcher.run('git', ['add', '.'])
+
+    // 3. Commit 수행
+    await this.Launcher.run('git', [
+      'commit',
+      '-m',
+      `${this.gitInfo.commitType} ${this.gitInfo.commitMessage}`
+    ])
+
+    // 4. Push 수행
   }
 
   /**
@@ -138,7 +163,10 @@ export class GitManage extends Command {
    * @example await this.pullGit();
    */
   private async pullGit() {
-    // Logic for Git pull operation
+    // 1. 현재 Branch 정보 취득
+    // 2. Remote Branch 정보 취득
+    // 3. Remote에 해당 Branch가 존재하는지 확인
+    // 4. Pull 수행
   }
 
   /**
@@ -147,6 +175,31 @@ export class GitManage extends Command {
    * @example await this.mergeGit();
    */
   private async mergeGit() {
-    // Logic for Git merge operation
+    // 1. 현재 Branch 정보 취득
+    // 2. 전체 Branch 목록 취득
+    // 3. 대상 Branch 취득 (prompt)
+    // 4. Merge 수행
+  }
+
+  /**
+   * @name branchManage
+   * @desc Performs related to Git Branch management.
+   * @example await this.branchManage()
+   */
+  private async branchManage() {
+    // 0. subCommand 정보 취득 (prompt)
+    // --------------------------------------------
+    // 1. 생성
+    // 1-1. 필요 정보 취득 (prompt)
+    // 1-2. 수행
+    // --------------------------------------------
+    // 2. 이름 변경
+    // 2-1. 필요 정보 취득 (prompt)
+    // 2-2. 수행
+    // --------------------------------------------
+    // 3. 삭제
+    // 3-1. 필요 정보 취득 (prompt)
+    // 3-2. 수행
+    // --------------------------------------------
   }
 }

@@ -18,31 +18,31 @@ const PROJECT_INIT_PROMPT: PromptObject[] = [
     ]
   },
   {
-    type: 'confirm',
+    type: 'toggle',
     name: 'useTypescript',
     message: 'Use TypeScript?',
     initial: false
   },
   {
-    type: 'confirm',
+    type: 'toggle',
     name: 'useFramework',
     message: 'Use Framework?',
     initial: false
   },
   {
-    type: 'confirm',
+    type: 'toggle',
     name: 'useGit',
     message: 'Use Git?',
     initial: false
   },
   {
-    type: 'confirm',
+    type: 'toggle',
     name: 'usePrettier',
     message: 'Use Prettier?',
     initial: false
   },
   {
-    type: 'confirm',
+    type: 'toggle',
     name: 'useEslint',
     message: 'Use ESLint?',
     initial: false

@@ -36,4 +36,10 @@ export declare class GitManage extends Command {
      * @example await this.mergeGit();
      */
     private mergeGit;
+    /**
+     * @name branchManage
+     * @desc Performs related to Git Branch management.
+     * @example await this.branchManage()
+     */
+    private branchManage;
 }
