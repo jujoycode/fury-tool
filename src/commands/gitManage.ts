@@ -155,6 +155,9 @@ export class GitManage extends Command {
     ])
 
     // 4. Push 수행
+    if (this.gitInfo.pushPermission) {
+      await this.Launcher.run('git', ['push', '-u', 'origin'])
+    }
   }
 
   /**
