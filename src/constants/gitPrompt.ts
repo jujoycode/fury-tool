@@ -10,7 +10,7 @@ const GIT_INIT_PROMPT: PromptObject[] = [
       { title: 'Commit & Push', value: 'push' },
       { title: 'Pull', value: 'pull', disabled: true },
       { title: 'Merge', value: 'merge', disabled: true },
-      { title: 'Branch Manage', value: 'brnach', disabled: true }
+      { title: 'Branch Manage', value: 'branch', disabled: true }
     ]
   }
 ]
