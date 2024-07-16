@@ -1,4 +1,4 @@
-import { Exception } from './exception';
+import { Exception } from './exception'
 export declare class AlreadyExistException extends Exception {
-    constructor(message: string);
+  constructor(message: string)
 }

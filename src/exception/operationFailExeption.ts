@@ -6,7 +6,7 @@ const title = 'OperationFail'
 export class OperationFailException extends Exception {
   constructor(message: string, context?: Error) {
     super(title, message, context)
-    this.logger.error(`${this.convertMessage(message as any)} Faild.`)
+    this.logger.error(`${this.convertMessage(message as any)} Failed.`)
   }
 
   private convertMessage(message: 'projectBuild' | 'createDirectory') {

@@ -1,9 +1,9 @@
 interface GitInfo {
-    subCommand: 'init' | 'push' | 'pull' | 'merge' | 'branch';
-    remoteUrl: string;
-    useFirstCommit: boolean;
-    commitType: string;
-    commitMessage: string;
-    pushPermission: boolean;
+  subCommand: 'init' | 'push' | 'pull' | 'merge' | 'branch'
+  remoteUrl: string
+  useFirstCommit: boolean
+  commitType: string
+  commitMessage: string
+  pushPermission: boolean
 }
-export { GitInfo };
+export { GitInfo }

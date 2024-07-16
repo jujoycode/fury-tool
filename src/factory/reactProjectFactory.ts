@@ -1,7 +1,7 @@
 import { Factory } from './factory'
 
 export class ReactProjectFactory extends Factory {
-  async setup() { }
+  async setup() {}
 
   getWorkDir(): string {
     return ''
