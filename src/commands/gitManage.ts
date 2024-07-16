@@ -137,7 +137,7 @@ export class GitManage extends Command {
    */
   private async pushGit() {
     // 1. commit 관련 정보 취득 (prompt)
-    const response = await this.Prompt.call(COMMIT_INFO)
+    const response = await this.Prompt.call(COMMIT_INFO) //ENHANCE: 추후, fury.yaml 파일을 통해 커스텀 가능하게 고도화
     this.CommonUtil.validateRequireFields(
       response,
       COMMIT_INFO.map(prompt => String(prompt.name))
