@@ -163,6 +163,7 @@ export class GitManage extends Command {
     )
     Object.assign(this.gitInfo, response)
 
+    this.Logger.space()
     const pushRunner = this.Spinner.start('📤  Push Commit to Remote Repo...')
 
     // 2. Changes를 Staged로 이관
