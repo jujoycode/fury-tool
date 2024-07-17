@@ -250,6 +250,15 @@ export class GitManage extends Command {
     Object.assign(this.gitInfo, branchInfo)
 
     // 4. Merge 수행
+    // 4-1. merge 대상이 remote라면 pull 수행
+    if (this.gitInfo.targetBranch.includes('remotes')) {
+      // await this.Launcher.run('git', ['pull', 'origin', this.gitInfo.targetBranch], this.sWorkDir)
+    }
+
+
+    // 5. 완료 여부 취득 (prompt)
+    // 5-1. 완료되었다면, continue 수행
+    // git merge --continue
   }
 
   /**
