@@ -1,6 +1,6 @@
 import { Command } from './'
 import { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO } from '../constants'
-import { GitException, AlreadyExistException } from '../exception'
+import { GitException, AlreadyExistException, NoDataException } from '../exception'
 
 import { GitInfo } from '../interfaces/git'
 
@@ -54,7 +54,7 @@ export class GitManage extends Command {
   }
 
   async finalize(): Promise<void> {
-    //NOTE: -. gitManage에선 굳이 필요한가?
+    //ENHANCE: -. gitManage에선 굳이 필요한가?
   }
 
   async rollback(): Promise<void> {
@@ -87,7 +87,7 @@ export class GitManage extends Command {
       throw new GitException('init')
     }
 
-    checkRunner.succeed('Project setup verified.')
+    checkRunner.succeed('Verification completed')
   }
 
   /**
@@ -109,7 +109,7 @@ export class GitManage extends Command {
     }
 
     // 1. git init 명령어 수행
-    await this.Launcher.run('git', ['init'])
+    await this.Launcher.run('git', ['init'], this.sWorkDir)
 
     // 2. 관련 정보 취득 (prompt)
     const response = await this.Prompt.call(INIT_SETTING)
@@ -120,13 +120,13 @@ export class GitManage extends Command {
     Object.assign(this.gitInfo, response)
 
     // 3. remote origin 설정
-    this.Launcher.run('git', ['remote', 'add', 'origin', this.gitInfo.remoteUrl])
+    this.Launcher.run('git', ['remote', 'add', 'origin', this.gitInfo.remoteUrl], this.sWorkDir)
 
     if (this.gitInfo.useFirstCommit) {
       // 4. first commit 수행
-      await this.Launcher.run('git', ['add', '.'])
-      await this.Launcher.run('git', ['commit', '-m', ':sparkles: Project Initial'])
-      await this.Launcher.run('git', ['push', '-u', 'origin', 'master'])
+      await this.Launcher.run('git', ['add', '.'], this.sWorkDir)
+      await this.Launcher.run('git', ['commit', '-m', ':sparkles: Project Initial'], this.sWorkDir)
+      await this.Launcher.run('git', ['push', '-u', 'origin', 'master'], this.sWorkDir)
     }
   }
 
@@ -145,18 +145,19 @@ export class GitManage extends Command {
     Object.assign(this.gitInfo, response)
 
     // 2. Changes를 Staged로 이관
-    await this.Launcher.run('git', ['add', '.'])
+    await this.Launcher.run('git', ['add', '.'], this.sWorkDir)
 
     // 3. Commit 수행
     await this.Launcher.run('git', [
       'commit',
       '-m',
-      `${this.gitInfo.commitType} ${this.gitInfo.commitMessage}`
+      `${this.gitInfo.commitType} ${this.gitInfo.commitMessage}`,
+      this.sWorkDir
     ])
 
     // 4. Push 수행
     if (this.gitInfo.pushPermission) {
-      await this.Launcher.run('git', ['push', '-u', 'origin'])
+      await this.Launcher.run('git', ['push', '-u', 'origin'], this.sWorkDir)
     }
   }
 
@@ -167,8 +168,31 @@ export class GitManage extends Command {
    */
   private async pullGit() {
     // 1. 현재 Branch 정보 취득
+    const sBranchList = await this.Launcher.run('git', ['branch'], this.sWorkDir)
+    const sCurrentBranch = sBranchList.split('\n').find(sBranch => sBranch.includes('*'))?.replace('*', '').trim()
+
+    if (sCurrentBranch === undefined) {
+      throw new NoDataException('currentBranch')
+    }
+
     // 2. Remote Branch 정보 취득
+    const sAllBranchList = await this.Launcher.run('git', ['branch', '-a'], this.sWorkDir)
+
     // 3. Remote에 해당 Branch가 존재하는지 확인
+    const bExistFlag = sAllBranchList.split('\n').some(sBranch => {
+      if (sBranch.split('/').length > 1) {
+        const arrBranchInfo = sBranch.split('/')
+
+        if (arrBranchInfo[arrBranchInfo.length - 1] === sCurrentBranch) {
+          return true
+        }
+      }
+    })
+
+    if (!bExistFlag) {
+      throw new GitException('')
+    }
+
     // 4. Pull 수행
   }
 
