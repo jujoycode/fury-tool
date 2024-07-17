@@ -29,10 +29,19 @@ export class Spinner {
     return Spinner.instance
   }
 
-  public get() {
+  private get() {
     if (!this.ora) {
       throw new NoDataException('Spinner instance is not initialized yet.')
     }
+
     return this.ora
+  }
+
+  public start(text: string) {
+    return this.get().start(text)
+  }
+
+  public success(spinner: Ora, text?: string) {
+    spinner.stopAndPersist({ symbol: '\x1b[32m√\x1b[0m', text: text })
   }
 }

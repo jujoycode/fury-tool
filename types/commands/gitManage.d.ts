@@ -2,9 +2,33 @@ import { Command } from './';
 export declare class GitManage extends Command {
     private gitInfo;
     private sWorkDir;
+    /**
+   * @name prepare
+   * @desc Prepare the project by collecting user inputs.
+   * @example
+   * await command.prepare();
+   */
     prepare(): Promise<void>;
+    /**
+   * @name execute
+   * @desc Execute the project creation.
+   * @example
+   * await command.execute();
+   */
     execute(): Promise<void>;
+    /**
+   * @name finalize
+   * @desc Finalize the project creation process.
+   * @example
+   * await command.finalize();
+   */
     finalize(): Promise<void>;
+    /**
+   * @name rollback
+   * @desc Rollback the project creation in case of failure.
+   * @example
+   * await command.rollback();
+   */
     rollback(): Promise<void>;
     /**
      * @name checkValidation

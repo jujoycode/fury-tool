@@ -9,5 +9,7 @@ export declare class Spinner {
      * @returns {Spinner} The Spinner instance.
      */
     static getInstance(): Spinner;
-    get(): Ora;
+    private get;
+    start(text: string): Ora;
+    success(spinner: Ora, text?: string): void;
 }

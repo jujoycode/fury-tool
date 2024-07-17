@@ -1,5 +1,5 @@
 import { Command } from './'
-import { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO } from '../constants'
+import { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO, BRANCH_LIST } from '../constants'
 import { GitException, AlreadyExistException, NoDataException } from '../exception'
 
 import { GitInfo } from '../interfaces/git'
@@ -8,6 +8,12 @@ export class GitManage extends Command {
   private gitInfo: GitInfo = {} as GitInfo
   private sWorkDir: string = process.cwd()
 
+  /**
+ * @name prepare
+ * @desc Prepare the project by collecting user inputs.
+ * @example
+ * await command.prepare();
+ */
   async prepare(): Promise<void> {
     // 0. Child Command 선택
     const gitInitResponse = await this.Prompt.call(GIT_INIT_PROMPT)
@@ -24,6 +30,12 @@ export class GitManage extends Command {
     }
   }
 
+  /**
+ * @name execute
+ * @desc Execute the project creation.
+ * @example
+ * await command.execute();
+ */
   async execute(): Promise<void> {
     switch (this.gitInfo.subCommand) {
       case 'init': {
@@ -53,10 +65,22 @@ export class GitManage extends Command {
     }
   }
 
+  /**
+ * @name finalize
+ * @desc Finalize the project creation process.
+ * @example
+ * await command.finalize();
+ */
   async finalize(): Promise<void> {
     //ENHANCE: -. gitManage에선 굳이 필요한가?
   }
 
+  /**
+ * @name rollback
+ * @desc Rollback the project creation in case of failure.
+ * @example
+ * await command.rollback();
+ */
   async rollback(): Promise<void> {
     // 99. 에러가 발생한 지점 파악
     // 99-1. Roollback 사전 준비
@@ -69,8 +93,6 @@ export class GitManage extends Command {
    * @example await this.checkValidation();
    */
   private async checkValidation() {
-    const checkRunner = this.Spinner.get().start('🔎  Verifying project setup...')
-
     // 0. git 설치 여부 검증
     try {
       await this.Launcher.run('git', ['-v'])
@@ -83,11 +105,8 @@ export class GitManage extends Command {
     const bCheckFlag = await this.FileUtil.checkExist(sPath)
 
     if (!bCheckFlag) {
-      checkRunner.fail()
       throw new GitException('init')
     }
-
-    checkRunner.succeed('Verification completed')
   }
 
   /**
@@ -169,7 +188,7 @@ export class GitManage extends Command {
   private async pullGit() {
     // 1. 현재 Branch 정보 취득
     const sBranchList = await this.Launcher.run('git', ['branch'], this.sWorkDir)
-    const sCurrentBranch = sBranchList.split('\n').find(sBranch => sBranch.includes('*'))?.replace('*', '').trim()
+    const sCurrentBranch = sBranchList.split('\n').find(sBranch => sBranch.includes('*'))!.replace('*', '').trim()
 
     if (sCurrentBranch === undefined) {
       throw new NoDataException('currentBranch')
@@ -190,10 +209,13 @@ export class GitManage extends Command {
     })
 
     if (!bExistFlag) {
-      throw new GitException('')
+      throw new GitException('remoteNotExist')
     }
 
     // 4. Pull 수행
+    const pullRunner = this.Spinner.start('📩  Pulling changes...')
+    await this.Launcher.run('git', ['pull', 'origin', sCurrentBranch], this.sWorkDir)
+    this.Spinner.success(pullRunner, '📩  Pull changes')
   }
 
   /**
@@ -203,8 +225,30 @@ export class GitManage extends Command {
    */
   private async mergeGit() {
     // 1. 현재 Branch 정보 취득
-    // 2. 전체 Branch 목록 취득
+    const sBranchList = await this.Launcher.run('git', ['branch'], this.sWorkDir)
+    const sCurrentBranch = sBranchList.split('\n').find(sBranch => sBranch.includes('*'))!.replace('*', '').trim()
+
+    if (sCurrentBranch === undefined) {
+      throw new NoDataException('currentBranch')
+    }
+
+    // 2. Remote Branch 정보 취득
+    const sAllBranchList = await this.Launcher.run('git', ['branch', '-a'], this.sWorkDir)
+    const promptData: { title: string, value: string }[] = []
+
+    sAllBranchList.split('\n').forEach(sBranch => {
+      const data = sBranch.replace('*', '').trim()
+      promptData.push({ title: data, value: data })
+    })
+
     // 3. 대상 Branch 취득 (prompt)
+    BRANCH_LIST[0].choices = promptData
+
+    const branchInfo = await this.Prompt.call(BRANCH_LIST)
+    this.CommonUtil.validateRequireFields(branchInfo, BRANCH_LIST.map(prompt => String(prompt.name)))
+
+    Object.assign(this.gitInfo, branchInfo)
+
     // 4. Merge 수행
   }
 

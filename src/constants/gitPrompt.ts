@@ -9,7 +9,7 @@ const GIT_INIT_PROMPT: PromptObject[] = [
       { title: 'Init', value: 'init' },
       { title: 'Commit & Push', value: 'push' },
       { title: 'Pull', value: 'pull' },
-      { title: 'Merge', value: 'merge', disabled: true },
+      { title: 'Merge', value: 'merge' },
       { title: 'Branch Manage', value: 'branch', disabled: true }
     ]
   }
@@ -85,4 +85,14 @@ const COMMIT_INFO: PromptObject[] = [
   }
 ]
 
-export { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO }
+const BRANCH_LIST: PromptObject[] = [
+  {
+    type: 'select',
+    name: 'targetBranch',
+    message: 'Select the target branch: ',
+    choices: [
+    ]
+  }
+]
+
+export { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO, BRANCH_LIST }

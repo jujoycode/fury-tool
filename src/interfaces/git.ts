@@ -5,6 +5,7 @@ interface GitInfo {
   commitType: string
   commitMessage: string
   pushPermission: boolean
+  targetBranch: string
 }
 
 export { GitInfo }

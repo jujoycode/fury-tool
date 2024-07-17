@@ -60,7 +60,7 @@ export class InitProject extends Command {
    * await command.execute();
    */
   async execute(): Promise<void> {
-    const createRunner = this.Spinner.get().start('Creating project...')
+    const createRunner = this.Spinner.start('Creating project...')
 
     // 1. Factory 생성
     const factory = new ProjectFactory(this.projectInfo).getFactory()
@@ -72,7 +72,7 @@ export class InitProject extends Command {
     this.sWorkDir = factory.getWorkDir()
 
     // 4. logging
-    createRunner.succeed(`✨ Creating project \x1b[35min\x1b[0m ${this.sWorkDir}`)
+    this.Spinner.success(createRunner, `✨ Creating project \x1b[35min\x1b[0m ${this.sWorkDir}`)
     this.Logger.space()
   }
 
@@ -86,7 +86,7 @@ export class InitProject extends Command {
     // 3. 후처리
     // -------------------------------------------------------
     // 3-1. README.md 생성
-    const readMeRunner = this.Spinner.get().start('📝  Write README.md...')
+    const writeRunner = this.Spinner.start('📝  Write README.md...')
 
     try {
       await this.FileUtil.createFile(
@@ -95,15 +95,15 @@ export class InitProject extends Command {
         markdownContent.replace(/{{projectName}}/g, this.projectInfo.projectName)
       )
 
-      readMeRunner.succeed('📝  Write README.md')
+      this.Spinner.success(writeRunner, '📝  Write README.md')
     } catch (error: any) {
-      readMeRunner.fail()
+      writeRunner.fail()
       this.Logger.error(error.message)
     }
 
     // 3-2. Git 사용 여부에 따라 Init 수행
     if (this.projectInfo.useGit) {
-      const gitRunner = this.Spinner.get().start('🌴  Setup Git...')
+      const gitRunner = this.Spinner.start('🌴  Setup Git...')
 
       // 3-2-1. .gitignore 파일 생성
       await this.FileUtil.createFile(this.sWorkDir, '.gitignore', 'node_modules')
@@ -119,7 +119,7 @@ export class InitProject extends Command {
           this.sWorkDir
         )
 
-        gitRunner.succeed('🌴  Setup Git')
+        this.Spinner.success(gitRunner, '🌴  Setup Git')
       } catch (error: any) {
         gitRunner.fail()
         this.Logger.error(error.message)
@@ -128,16 +128,16 @@ export class InitProject extends Command {
 
     // 3-3. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
     if (this.projectInfo.usePrettier) {
-      const prtRunner = this.Spinner.get().start('🎨  Setup Prettier...')
+      const prtRunner = this.Spinner.start('🎨  Setup Prettier...')
 
       await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
 
-      prtRunner.succeed('🎨  Setup Prettier')
+      this.Spinner.success(prtRunner, '🎨  Setup Prettier')
     }
 
     // -------------------------------------------------------
     // 4. Package 설치
-    const pkgRunner = this.Spinner.get().start('📦  Installing dependencies...')
+    const pkgRunner = this.Spinner.start('📦  Installing dependencies...')
 
     const output = await this.Launcher.run(
       this.projectInfo.packageManager,
@@ -145,7 +145,7 @@ export class InitProject extends Command {
       this.sWorkDir
     )
 
-    pkgRunner.succeed('📦  Install dependencies\n')
+    this.Spinner.success(pkgRunner, '📦  Install dependencies\n')
     this.Logger.system(output)
 
     // 5. logging
