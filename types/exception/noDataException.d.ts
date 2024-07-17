@@ -1,5 +1,5 @@
-import { Exception } from './exception'
+import { Exception } from './exception';
 export declare class NoDataException extends Exception {
-  constructor(message: string)
-  private convertMessage
+    constructor(message: string);
+    private convertMessage;
 }
