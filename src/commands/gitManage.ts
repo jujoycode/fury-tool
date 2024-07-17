@@ -163,6 +163,8 @@ export class GitManage extends Command {
     )
     Object.assign(this.gitInfo, response)
 
+    const pushRunner = this.Spinner.start('📤  Push Commit to Remote Repo...')
+
     // 2. Changes를 Staged로 이관
     await this.Launcher.run('git', ['add', '.'], this.sWorkDir)
 
@@ -178,6 +180,8 @@ export class GitManage extends Command {
     if (this.gitInfo.pushPermission) {
       await this.Launcher.run('git', ['push', '-u', 'origin'], this.sWorkDir)
     }
+
+    this.Spinner.success(pushRunner, '📤  Push Commit to Remote Repo')
   }
 
   /**
