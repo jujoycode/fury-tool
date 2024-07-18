@@ -194,15 +194,10 @@ export class GitManage extends Command {
    */
   private async pullGit() {
     // 1. 현재 Branch 정보 취득
-    const sBranchList = await this.Launcher.run('git', ['branch'], this.sWorkDir)
-    const sCurrentBranch = sBranchList.split('\n').find(sBranch => sBranch.includes('*'))!.replace('*', '').trim()
-
-    if (sCurrentBranch === undefined) {
-      throw new NoDataException('currentBranch')
-    }
+    const sCurrentBranch = await this.getBranchList('local')
 
     // 2. Remote Branch 정보 취득
-    const sAllBranchList = await this.Launcher.run('git', ['branch', '-a'], this.sWorkDir)
+    const sAllBranchList = await this.getBranchList('remote')
 
     // 3. Remote에 해당 Branch가 존재하는지 확인
     const bExistFlag = sAllBranchList.split('\n').some(sBranch => {
@@ -232,19 +227,14 @@ export class GitManage extends Command {
    */
   private async mergeGit() {
     // 1. 현재 Branch 정보 취득
-    const sBranchList = await this.Launcher.run('git', ['branch'], this.sWorkDir)
-    const sCurrentBranch = sBranchList.split('\n').find(sBranch => sBranch.includes('*'))!.replace('*', '').trim()
-
-    if (sCurrentBranch === undefined) {
-      throw new NoDataException('currentBranch')
-    }
+    const sCurrentBranch = await this.getBranchList('local')
 
     // 2. Remote Branch 정보 취득
-    const sAllBranchList = await this.Launcher.run('git', ['branch', '-a'], this.sWorkDir)
+    const sAllBranchList = await this.getBranchList('remote')
     const promptData: { title: string, value: string }[] = []
 
     sAllBranchList.split('\n').forEach(sBranch => {
-      //NOTE: HEAD는 대상에서 제외
+      //NOTE: HEAD와 같은 명칭의 branch는 대상에서 제외
       if (sBranch.includes('->') || sBranch.includes(sCurrentBranch)) {
         return
       }
@@ -296,18 +286,54 @@ export class GitManage extends Command {
    */
   private async branchManage() {
     // 0. subCommand 정보 취득 (prompt)
+    await this.Prompt.call([])
+
     // --------------------------------------------
     // 1. 생성
     // 1-1. 필요 정보 취득 (prompt)
+    await this.Prompt.call([])
+
     // 1-2. 수행
+    // git checkout -b `${sBranchName}`
+
     // --------------------------------------------
     // 2. 이름 변경
     // 2-1. 필요 정보 취득 (prompt)
+    await this.Prompt.call([])
+
     // 2-2. 수행
+    // git branch -m currentName newName
+
     // --------------------------------------------
     // 3. 삭제
     // 3-1. 필요 정보 취득 (prompt)
+    await this.Prompt.call([])
+
     // 3-2. 수행
-    // --------------------------------------------
+    // git branch -d currentBranch
+  }
+
+  /**
+   * @name
+   * @desc
+   * @example await this.getBranchList()
+   */
+  private async getBranchList(type: 'local' | 'remote') {
+    switch (type) {
+      case 'local': {
+        const sBranchList = await this.Launcher.run('git', ['branch'], this.sWorkDir)
+        const sCurrentBranch = sBranchList.split('\n').find(sBranch => sBranch.includes('*'))!.replace('*', '').trim()
+
+        if (sCurrentBranch === undefined) {
+          throw new NoDataException('currentBranch')
+        }
+
+        return sCurrentBranch
+      }
+      case 'remote': {
+        const sAllBranchList = await this.Launcher.run('git', ['branch', '-a'], this.sWorkDir)
+        return sAllBranchList
+      }
+    }
   }
 }

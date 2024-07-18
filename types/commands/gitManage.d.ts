@@ -66,4 +66,10 @@ export declare class GitManage extends Command {
      * @example await this.branchManage()
      */
     private branchManage;
+    /**
+     * @name
+     * @desc
+     * @example await this.getBranchList()
+     */
+    private getBranchList;
 }
