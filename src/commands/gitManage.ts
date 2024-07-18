@@ -274,17 +274,19 @@ export class GitManage extends Command {
     try {
       await this.Launcher.run('git', ['merge', `${sBranch}`])
       this.Spinner.success(mergeRunner, `✨ \x1b[32m${sCurrentBranch}\x1b[0m ← \x1b[35m${sBranch}\x1b[0m have been merged`)
-    } catch (error) {
+    } catch (error: any) {
+      // 4-2. 에러가 발생하였다면, 유저에게 완료가 되었는지 여부 확인 후 병합 종료 커맨드 실행
       mergeRunner.fail()
-      throw new GitException('mergeFail')
+      this.Logger.error(error.message)
+
+      this.Logger.space()
+      await this.Prompt.call(MERGE_INFO)
+
+      // 4-3. 완료되었다면, continue 수행
+      mergeRunner.start('💀 Resolving merge conflicts...')
+      await this.Launcher.run('git', ['merge', '--continue'])
+      this.Spinner.success(mergeRunner, '💀 Merge Conflict Resolution')
     }
-
-    // 5. 완료 여부 취득 (prompt)
-    this.Logger.space()
-    await this.Prompt.call(MERGE_INFO)
-
-    // 5-1. 완료되었다면, continue 수행
-    // git merge --continue
   }
 
   /**
