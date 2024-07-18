@@ -1,5 +1,5 @@
 import { Command } from './'
-import { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO, BRANCH_LIST } from '../constants'
+import { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO, BRANCH_LIST, MERGE_INFO } from '../constants'
 import { GitException, AlreadyExistException, NoDataException } from '../exception'
 
 import { GitInfo } from '../interfaces/git'
@@ -155,6 +155,8 @@ export class GitManage extends Command {
    * @example await this.pushGit();
    */
   private async pushGit() {
+    //ENHANCE: fury.yaml 존재 확인 프로세스 추가 후 COMMIT_INFO[0].choices 수정
+
     // 1. commit 관련 정보 취득 (prompt)
     const response = await this.Prompt.call(COMMIT_INFO)
     this.CommonUtil.validateRequireFields(
@@ -164,7 +166,7 @@ export class GitManage extends Command {
     Object.assign(this.gitInfo, response)
 
     this.Logger.space()
-    const pushRunner = this.Spinner.start('📤  Push Commit to Remote Repo...')
+    const pushRunner = this.Spinner.start('📤 Push Commit to Remote Repo...')
 
     // 2. Changes를 Staged로 이관
     await this.Launcher.run('git', ['add', '.'], this.sWorkDir)
@@ -182,7 +184,7 @@ export class GitManage extends Command {
       await this.Launcher.run('git', ['push', '-u', 'origin'], this.sWorkDir)
     }
 
-    this.Spinner.success(pushRunner, '📤  Push Commit to Remote Repo')
+    this.Spinner.success(pushRunner, '📤 Push Commit to Remote Repo')
   }
 
   /**
@@ -243,7 +245,7 @@ export class GitManage extends Command {
 
     sAllBranchList.split('\n').forEach(sBranch => {
       //NOTE: HEAD는 대상에서 제외
-      if (sBranch.includes('->')) {
+      if (sBranch.includes('->') || sBranch.includes(sCurrentBranch)) {
         return
       }
 
@@ -258,18 +260,29 @@ export class GitManage extends Command {
     this.CommonUtil.validateRequireFields(branchInfo, BRANCH_LIST.map(prompt => String(prompt.name)))
     Object.assign(this.gitInfo, branchInfo)
 
-    // 4. Merge 수행
     const sBranch = this.gitInfo.targetBranch.split('/').pop()
+    this.Logger.space()
+
+    // 4. Merge 수행
+    const mergeRunner = this.Spinner.start(`✨ Merging \x1b[32m${sCurrentBranch}\x1b[0m ← \x1b[35m${sBranch}\x1b[0m`)
 
     // 4-1. merge 대상이 remote라면 pull 수행
     if (this.gitInfo.targetBranch.includes('remotes')) {
       await this.Launcher.run('git', ['pull', 'origin', `${sBranch}`], this.sWorkDir)
     }
 
-    const stdout = await this.Launcher.run('git', ['merge', `${sBranch}`])
-    this.Logger.debug(stdout)
+    try {
+      await this.Launcher.run('git', ['merge', `${sBranch}`])
+      this.Spinner.success(mergeRunner, `✨ \x1b[32m${sCurrentBranch}\x1b[0m ← \x1b[35m${sBranch}\x1b[0m have been merged`)
+    } catch (error) {
+      mergeRunner.fail()
+      throw new GitException('mergeFail')
+    }
 
     // 5. 완료 여부 취득 (prompt)
+    this.Logger.space()
+    await this.Prompt.call(MERGE_INFO)
+
     // 5-1. 완료되었다면, continue 수행
     // git merge --continue
   }

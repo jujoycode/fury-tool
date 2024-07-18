@@ -95,4 +95,13 @@ const BRANCH_LIST: PromptObject[] = [
   }
 ]
 
-export { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO, BRANCH_LIST }
+const MERGE_INFO: PromptObject[] = [
+  {
+    type: 'confirm',
+    name: 'mergeComplete',
+    message: 'Merge Done?: ',
+    initial: false
+  }
+]
+
+export { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO, BRANCH_LIST, MERGE_INFO }
