@@ -194,10 +194,10 @@ export class GitManage extends Command {
    */
   private async pullGit() {
     // 1. 현재 Branch 정보 취득
-    const sCurrentBranch = await this.getBranchList('local')
+    const sCurrentBranch = await this.getBranchList('current')
 
-    // 2. Remote Branch 정보 취득
-    const sAllBranchList = await this.getBranchList('remote')
+    // 2. 전체 Branch 정보 취득
+    const sAllBranchList = await this.getBranchList('all')
 
     // 3. Remote에 해당 Branch가 존재하는지 확인
     const bExistFlag = sAllBranchList.split('\n').some(sBranch => {
@@ -227,12 +227,13 @@ export class GitManage extends Command {
    */
   private async mergeGit() {
     // 1. 현재 Branch 정보 취득
-    const sCurrentBranch = await this.getBranchList('local')
+    const sCurrentBranch = await this.getBranchList('current')
 
-    // 2. Remote Branch 정보 취득
-    const sAllBranchList = await this.getBranchList('remote')
+    // 2. 전체 Branch 정보 취득
+    const sAllBranchList = await this.getBranchList('all')
+
+    // 2-1. Branch 목록 가공
     const promptData: { title: string, value: string }[] = []
-
     sAllBranchList.split('\n').forEach(sBranch => {
       //NOTE: HEAD와 같은 명칭의 branch는 대상에서 제외
       if (sBranch.includes('->') || sBranch.includes(sCurrentBranch)) {
@@ -288,13 +289,19 @@ export class GitManage extends Command {
     // 0. subCommand 정보 취득 (prompt)
     await this.Prompt.call([])
 
-    // --------------------------------------------
-    // 1. 생성
-    // 1-1. 필요 정보 취득 (prompt)
-    await this.Prompt.call([])
+    switch ('') {
+      case '': {
+        // --------------------------------------------
+        // 1. 생성
+        // 1-1. 필요 정보 취득 (prompt)
+        await this.Prompt.call([])
 
-    // 1-2. 수행
-    // git checkout -b `${sBranchName}`
+        // 1-2. 수행
+        // git checkout -b `${sBranchName}`
+
+        break
+      }
+    }
 
     // --------------------------------------------
     // 2. 이름 변경
@@ -302,7 +309,8 @@ export class GitManage extends Command {
     await this.Prompt.call([])
 
     // 2-2. 수행
-    // git branch -m currentName newName
+    const sBranchName = await this.getBranchList('current')
+    await this.Launcher.run('git', ['branch', '-m', `${sBranchName}`, `sNewBranchName`])
 
     // --------------------------------------------
     // 3. 삭제
@@ -318,9 +326,9 @@ export class GitManage extends Command {
    * @desc
    * @example await this.getBranchList()
    */
-  private async getBranchList(type: 'local' | 'remote') {
+  private async getBranchList(type: 'current' | 'all') {
     switch (type) {
-      case 'local': {
+      case 'current': {
         const sBranchList = await this.Launcher.run('git', ['branch'], this.sWorkDir)
         const sCurrentBranch = sBranchList.split('\n').find(sBranch => sBranch.includes('*'))!.replace('*', '').trim()
 
@@ -330,7 +338,7 @@ export class GitManage extends Command {
 
         return sCurrentBranch
       }
-      case 'remote': {
+      case 'all': {
         const sAllBranchList = await this.Launcher.run('git', ['branch', '-a'], this.sWorkDir)
         return sAllBranchList
       }

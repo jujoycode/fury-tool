@@ -1,4 +1,5 @@
 import prompts, { PromptObject } from 'prompts'
+import { CommonUtil } from '../utils'
 
 export { PromptObject }
 
@@ -17,6 +18,7 @@ export class Prompt {
       }
     })
 
+    CommonUtil.validateRequireFields(result, PromptObject.map(prompt => String(prompt.name)))
     return result
   }
 }
