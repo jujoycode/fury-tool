@@ -1,3 +1,4 @@
+import os from 'os'
 import { NoDataException } from '../exception'
 
 import type { Ora } from '../interfaces/spinner'
@@ -42,6 +43,11 @@ export class Spinner {
   }
 
   public success(spinner: Ora, text?: string) {
-    spinner.stopAndPersist({ symbol: '\x1b[32m√\x1b[0m', text: text })
+    // OS Type에 따라 지원하는 Emoji 변경
+    if (os.type() === 'Windows_NT') {
+      spinner.stopAndPersist({ symbol: '\x1b[32m√\x1b[0m', text: text })
+    } else {
+      spinner.succeed(text)
+    }
   }
 }

@@ -242,6 +242,11 @@ export class GitManage extends Command {
     const promptData: { title: string, value: string }[] = []
 
     sAllBranchList.split('\n').forEach(sBranch => {
+      //NOTE: HEAD는 대상에서 제외
+      if (sBranch.includes('->')) {
+        return
+      }
+
       const data = sBranch.replace('*', '').trim()
       promptData.push({ title: data, value: data })
     })
@@ -251,15 +256,18 @@ export class GitManage extends Command {
 
     const branchInfo = await this.Prompt.call(BRANCH_LIST)
     this.CommonUtil.validateRequireFields(branchInfo, BRANCH_LIST.map(prompt => String(prompt.name)))
-
     Object.assign(this.gitInfo, branchInfo)
 
     // 4. Merge 수행
+    const sBranch = this.gitInfo.targetBranch.split('/').pop()
+
     // 4-1. merge 대상이 remote라면 pull 수행
     if (this.gitInfo.targetBranch.includes('remotes')) {
-      // await this.Launcher.run('git', ['pull', 'origin', this.gitInfo.targetBranch], this.sWorkDir)
+      await this.Launcher.run('git', ['pull', 'origin', `${sBranch}`], this.sWorkDir)
     }
 
+    const stdout = await this.Launcher.run('git', ['merge', `${sBranch}`])
+    this.Logger.debug(stdout)
 
     // 5. 완료 여부 취득 (prompt)
     // 5-1. 완료되었다면, continue 수행
