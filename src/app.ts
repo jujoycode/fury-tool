@@ -82,15 +82,19 @@ class App {
 
     switch (true) {
       case options.git: {
+        //READ: git 관련 작업 수행 (push, pull, merge, manage branch)
         return new GitManage(objCommandParams)
       }
       case options.migration: {
+        //READ: DB 병합 관련 기능 수행 (table)
         return
       }
       case options.setting: {
+        //READ: fury 설정 기능 제공
         return
       }
       default: {
+        //READ: Project 생성 기능
         return new InitProject(objCommandParams)
       }
     }
