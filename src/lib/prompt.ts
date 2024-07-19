@@ -1,5 +1,5 @@
 import prompts, { PromptObject } from 'prompts'
-import { CommonUtil } from '../utils'
+import { Logger, CommonUtil } from '../utils'
 
 export { PromptObject }
 
@@ -14,7 +14,7 @@ export class Prompt {
     const result = await this.prompt(PromptObject, {
       onCancel: () => {
         //ENHANCE: custom exception으로 변경 후, Rollback 호출
-        console.error('User Cancel Exception')
+        Logger.getInstance().error('User Cancel Exception')
       }
     })
 
