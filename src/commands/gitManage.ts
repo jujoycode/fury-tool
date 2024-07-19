@@ -289,8 +289,8 @@ export class GitManage extends Command {
       this.Logger.error(error.message)
 
       this.Logger.space()
-      const mergeCompleteResponse = await this.Prompt.call(MERGE_INFO)
 
+      const mergeCompleteResponse = await this.Prompt.call(MERGE_INFO)
       if (mergeCompleteResponse?.mergeComplete) {
         // 4-3. 완료되었다면, continue 수행
         mergeRunner.start('💀 Resolving merge conflicts...')
@@ -361,11 +361,11 @@ export class GitManage extends Command {
       // 3. 이름 변경
       case 'rename': {
         // 3-1. 필요 정보 취득 (prompt)
-        await this.Prompt.call([])
+        Object.assign(this.gitInfo, await this.Prompt.call(BRANCH_INFO))
         const sCurrentBranchName = await this.getBranchList('current')
 
         // 3-2. Local 브랜치명 변경
-        command.push('branch', '-m', `${sCurrentBranchName} `, ` < new- name > `)
+        command.push('branch', '-m', `${sCurrentBranchName} `, this.gitInfo.targetName)
 
         break
       }
