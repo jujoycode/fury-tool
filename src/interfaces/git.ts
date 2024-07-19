@@ -6,6 +6,7 @@ interface GitInfo {
   commitMessage: string
   pushPermission: boolean
   targetBranch: string
+  branchCommand: "change" | "create" | "rename" | "delete"
 }
 
 export { GitInfo }

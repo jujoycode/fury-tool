@@ -24,29 +24,15 @@ export class InitProject extends Command {
     const projectInitResponse = await this.Prompt.call(PROJECT_INIT_PROMPT)
     Object.assign(this.projectInfo, projectInitResponse)
 
-    // 0-1. 필수값 검증
-    const requiredField = PROJECT_INIT_PROMPT.map(prompt => String(prompt.name))
-    this.CommonUtil.validateRequireFields(this.projectInfo, requiredField)
-
-    // 0-2. Framework 종류 정보 취득 (prompt)
+    // 0-1. Framework 종류 정보 취득 (prompt)
     if (this.projectInfo.useFramework) {
       const response = await this.Prompt.call(USE_FRAMEWORK)
-      this.CommonUtil.validateRequireFields(
-        response,
-        USE_FRAMEWORK.map(prompt => String(prompt.name))
-      )
-
       Object.assign(this.projectInfo, response)
     }
 
-    // 0-3. git remote URL 정보 취득 (prompt)
+    // 0-2. git remote URL 정보 취득 (prompt)
     if (this.projectInfo.useGit) {
       const response = await this.Prompt.call(USE_GIT)
-      this.CommonUtil.validateRequireFields(
-        response,
-        USE_GIT.map(prompt => String(prompt.name))
-      )
-
       Object.assign(this.projectInfo, response)
     }
 

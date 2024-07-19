@@ -1,5 +1,5 @@
 import { Command } from './'
-import { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO, BRANCH_LIST, MERGE_INFO } from '../constants'
+import { GIT_INIT_PROMPT, INIT_SETTING, COMMIT_INFO, BRANCH_LIST, MERGE_INFO, BRANCH_COMMAND } from '../constants'
 import { GitException, AlreadyExistException, NoDataException } from '../exception'
 
 import { GitInfo } from '../interfaces/git'
@@ -17,11 +17,6 @@ export class GitManage extends Command {
   async prepare(): Promise<void> {
     // 0. Child Command 선택
     const gitInitResponse = await this.Prompt.call(GIT_INIT_PROMPT)
-    this.CommonUtil.validateRequireFields(
-      gitInitResponse,
-      GIT_INIT_PROMPT.map(prompt => String(prompt.name))
-    )
-
     Object.assign(this.gitInfo, gitInitResponse)
 
     // 1. init을 제외한 커맨드에서 validation 수행
@@ -132,10 +127,6 @@ export class GitManage extends Command {
 
     // 2. 관련 정보 취득 (prompt)
     const response = await this.Prompt.call(INIT_SETTING)
-    this.CommonUtil.validateRequireFields(
-      response,
-      INIT_SETTING.map(prompt => String(prompt.name))
-    )
     Object.assign(this.gitInfo, response)
 
     // 3. remote origin 설정
@@ -158,11 +149,7 @@ export class GitManage extends Command {
     //ENHANCE: fury.yaml 존재 확인 프로세스 추가 후 COMMIT_INFO[0].choices 수정
 
     // 1. commit 관련 정보 취득 (prompt)
-    const response = await this.Prompt.call(COMMIT_INFO) //ENHANCE: 추후, fury.yaml 파일을 통해 커스텀 가능하게 고도화
-    this.CommonUtil.validateRequireFields(
-      response,
-      COMMIT_INFO.map(prompt => String(prompt.name))
-    )
+    const response = await this.Prompt.call(COMMIT_INFO)
     Object.assign(this.gitInfo, response)
 
     this.Logger.space()
@@ -232,24 +219,17 @@ export class GitManage extends Command {
     // 2. 전체 Branch 정보 취득
     const sAllBranchList = await this.getBranchList('all')
 
-    // 2-1. Branch 목록 가공
-    const promptData: { title: string, value: string }[] = []
-    sAllBranchList.split('\n').forEach(sBranch => {
-      //NOTE: HEAD와 같은 명칭의 branch는 대상에서 제외
-      if (sBranch.includes('->') || sBranch.includes(sCurrentBranch)) {
-        return
-      }
-
-      const data = sBranch.replace('*', '').trim()
-      promptData.push({ title: data, value: data })
-    })
+    // 2-1. Branch 목록 가공   
+    BRANCH_LIST[0].choices = sAllBranchList.split('\n')
+      .filter(sBranch => !sBranch.includes('->') && !sBranch.includes(sCurrentBranch))
+      .map(sBranch => {
+        const data = sBranch.replace('*', '').trim()
+        return { title: data, value: data }
+      })
 
     // 3. 대상 Branch 취득 (prompt)
-    BRANCH_LIST[0].choices = promptData
-
-    const branchInfo = await this.Prompt.call(BRANCH_LIST)
-    this.CommonUtil.validateRequireFields(branchInfo, BRANCH_LIST.map(prompt => String(prompt.name)))
-    Object.assign(this.gitInfo, branchInfo)
+    const branchInfoResponse = await this.Prompt.call(BRANCH_LIST)
+    Object.assign(this.gitInfo, branchInfoResponse)
 
     const sBranch = this.gitInfo.targetBranch.split('/').pop()
     this.Logger.space()
@@ -263,7 +243,7 @@ export class GitManage extends Command {
     }
 
     try {
-      await this.Launcher.run('git', ['merge', `${sBranch}`])
+      await this.Launcher.run('git', ['merge', `${sBranch}`], this.sWorkDir)
       this.Spinner.success(mergeRunner, `✨ \x1b[32m${sCurrentBranch}\x1b[0m ← \x1b[35m${sBranch}\x1b[0m have been merged`)
     } catch (error: any) {
       // 4-2. 에러가 발생하였다면, 유저에게 완료가 되었는지 여부 확인 후 병합 종료 커맨드 실행
@@ -271,12 +251,14 @@ export class GitManage extends Command {
       this.Logger.error(error.message)
 
       this.Logger.space()
-      await this.Prompt.call(MERGE_INFO)
+      const mergeCompleteResponse = await this.Prompt.call(MERGE_INFO)
 
-      // 4-3. 완료되었다면, continue 수행
-      mergeRunner.start('💀 Resolving merge conflicts...')
-      await this.Launcher.run('git', ['merge', '--continue'])
-      this.Spinner.success(mergeRunner, '💀 Merge Conflict Resolution')
+      if (mergeCompleteResponse?.mergeComplete) {
+        // 4-3. 완료되었다면, continue 수행
+        mergeRunner.start('💀 Resolving merge conflicts...')
+        await this.Launcher.run('git', ['merge', '--continue'], this.sWorkDir)
+        this.Spinner.success(mergeRunner, '💀 Merge Conflict Resolution')
+      }
     }
   }
 
@@ -287,38 +269,63 @@ export class GitManage extends Command {
    */
   private async branchManage() {
     // 0. subCommand 정보 취득 (prompt)
-    await this.Prompt.call([])
+    const subCommandResponse = await this.Prompt.call(BRANCH_COMMAND)
+    Object.assign(this.gitInfo, subCommandResponse)
 
-    switch ('') {
-      case '': {
-        // --------------------------------------------
-        // 1. 생성
+    const command: string[] = []
+
+    switch (this.gitInfo.branchCommand) {
+      // 1. 변경
+      case 'change': {
         // 1-1. 필요 정보 취득 (prompt)
         await this.Prompt.call([])
 
         // 1-2. 수행
-        // git checkout -b `${sBranchName}`
+        // git stash
+        // git switch targetBranch
+
+        break
+      }
+
+      // 2. 생성
+      case 'create': {
+        // 2-1. 필요 정보 취득 (prompt)
+        await this.Prompt.call([])
+
+        // 2-2. 수행
+        command.push('switch', '-c', `<new-name>`, `<start-point>`)
+
+        break
+      }
+
+      // 3. 이름 변경
+      case 'rename': {
+        // 3-1. 필요 정보 취득 (prompt)
+        await this.Prompt.call([])
+        const sCurrentBranchName = await this.getBranchList('current')
+
+        // 3-2. Local 브랜치명 변경
+        command.push('branch', '-m', `<old-name>`, `<new-name>`)
+
+        break
+      }
+
+      // 4. 삭제
+      case 'delete': {
+        // 4-1. 필요 정보 취득 (prompt)
+        await this.Prompt.call([])
+
+        // 4-2. Local 삭제
+        command.push('branch', '-D', ``)
+
+        // 4-3. Remote 삭제
+        // if
 
         break
       }
     }
 
-    // --------------------------------------------
-    // 2. 이름 변경
-    // 2-1. 필요 정보 취득 (prompt)
-    await this.Prompt.call([])
-
-    // 2-2. 수행
-    const sBranchName = await this.getBranchList('current')
-    await this.Launcher.run('git', ['branch', '-m', `${sBranchName}`, `sNewBranchName`])
-
-    // --------------------------------------------
-    // 3. 삭제
-    // 3-1. 필요 정보 취득 (prompt)
-    await this.Prompt.call([])
-
-    // 3-2. 수행
-    // git branch -d currentBranch
+    await this.Launcher.run('git', command, this.sWorkDir)
   }
 
   /**
