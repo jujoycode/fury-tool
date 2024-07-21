@@ -185,7 +185,7 @@ export class GitManage extends Command {
     Object.assign(this.gitInfo, await this.Prompt.call(COMMIT_INFO))
 
     this.Logger.space()
-    const pushRunner = this.Spinner.start('📤 Push Commit to Remote Repo...')
+    const pushRunner = this.Spinner.start('📤 Push Commit to Remote Repo...') //FIXME: 메시지가 조건에 따라 변경되게 수정 (local, remote)
 
     try {
       // 2. Changes를 Staged로 이관
