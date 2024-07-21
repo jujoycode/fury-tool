@@ -4,8 +4,6 @@ import { join } from 'path'
 import { OperationFailException } from '../exception'
 
 export class FileUtil {
-  constructor() {}
-
   static makePath(sRootPath: string, sTargetPath: string): string {
     return join(sRootPath, sTargetPath)
   }

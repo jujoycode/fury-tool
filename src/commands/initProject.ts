@@ -62,7 +62,7 @@ export class InitProject extends Command {
       this.Spinner.success(createRunner, `✨ Creating project \x1b[35min\x1b[0m ${this.sWorkDir}`)
       this.Logger.space()
     } catch (error) {
-      createRunner.stop()
+      createRunner.fail()
       throw error
     }
 

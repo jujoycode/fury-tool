@@ -1,5 +1,4 @@
 export declare class FileUtil {
-    constructor();
     static makePath(sRootPath: string, sTargetPath: string): string;
     static checkExist(sTargetPath: string): Promise<boolean>;
     static createDirectory(sWorkDir: string, sDirName: string, option?: {
