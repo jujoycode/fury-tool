@@ -322,6 +322,7 @@ export class GitManage extends Command {
    * @example
    * await this.branchManage();
    */
+  // TODO: 내부 로직을 메서드로 분리해야됨... 예외 처리 및 기타 처리 불가
   private async branchManage(): Promise<void> {
     // 0. subCommand 정보 취득 (prompt)
     Object.assign(this.gitInfo, await this.Prompt.call(BRANCH_COMMAND))
@@ -379,7 +380,7 @@ export class GitManage extends Command {
 
       // 3. 이름 변경
       case 'rename': {
-        // 3-1. 필요 정보 취득 (prompt)
+        // 3-1. 변경할 Branch 명 취득
         Object.assign(this.gitInfo, await this.Prompt.call(BRANCH_INFO))
 
         // 3-2. 현재 Branch 정보 취득
@@ -388,24 +389,24 @@ export class GitManage extends Command {
         // 3-3. Local Branch명 변경
         command.push('branch', '-m', `${sCurrentBranchName}`, this.gitInfo.targetName)
 
-        if (this.gitInfo) {
-          // 3-4. Remote Branch명 반영
-        }
+        // if (this.gitInfo) {
+        //   // 3-4. Remote Branch 명 반영
+        // }
 
         break
       }
 
       // 4. 삭제
       case 'delete': {
-        // 4-1. 필요 정보 취득 (prompt)
-        await this.Prompt.call([])
+        // 4-1. 삭제할 Branch 명 취득 (prompt)
+        Object.assign(this.gitInfo, await this.Prompt.call(BRANCH_INFO))
 
-        // 4-2. Local Branch명 삭제
-        command.push('branch', '-D', ``)
+        // 4-2. Local Branch 삭제 (safety)
+        command.push('branch', '-d', this.gitInfo.targetName)
 
-        if (this.gitInfo) {
-          // 4-3. Remote Branch명 삭제
-        }
+        // if (this.gitInfo) {
+        //   // 4-3. Remote Branch 삭제
+        // }
 
         break
       }
