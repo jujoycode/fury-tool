@@ -48,18 +48,24 @@ export class InitProject extends Command {
   async execute(): Promise<void> {
     const createRunner = this.Spinner.start('Creating project...')
 
-    // 1. Factory 생성
-    const factory = new ProjectFactory(this.projectInfo).getFactory()
+    try {
+      // 1. Factory 생성
+      const factory = new ProjectFactory(this.projectInfo).getFactory()
 
-    // 2. Project Setup
-    await factory.setup()
+      // 2. Project Setup
+      await factory.setup()
 
-    // 3. get project path
-    this.sWorkDir = factory.getWorkDir()
+      // 3. get project path
+      this.sWorkDir = factory.getWorkDir()
 
-    // 4. logging
-    this.Spinner.success(createRunner, `✨ Creating project \x1b[35min\x1b[0m ${this.sWorkDir}`)
-    this.Logger.space()
+      // 4. logging
+      this.Spinner.success(createRunner, `✨ Creating project \x1b[35min\x1b[0m ${this.sWorkDir}`)
+      this.Logger.space()
+    } catch (error) {
+      createRunner.stop()
+      throw error
+    }
+
   }
 
   /**
@@ -116,32 +122,41 @@ export class InitProject extends Command {
     if (this.projectInfo.usePrettier) {
       const prtRunner = this.Spinner.start('🎨  Setup Prettier...')
 
-      await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
-
-      this.Spinner.success(prtRunner, '🎨  Setup Prettier')
+      try {
+        await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
+        this.Spinner.success(prtRunner, '🎨  Setup Prettier')
+      } catch (error) {
+        prtRunner.fail()
+        throw error
+      }
     }
 
     // -------------------------------------------------------
     // 4. Package 설치
     const pkgRunner = this.Spinner.start('📦  Installing dependencies...')
 
-    const output = await this.Launcher.run(
-      this.projectInfo.packageManager,
-      ['install'],
-      this.sWorkDir
-    )
+    try {
+      const output = await this.Launcher.run(
+        this.projectInfo.packageManager,
+        ['install'],
+        this.sWorkDir
+      )
 
-    this.Spinner.success(pkgRunner, '📦  Install dependencies\n')
-    this.Logger.system(output)
+      this.Spinner.success(pkgRunner, '📦  Install dependencies\n')
+      this.Logger.system(output)
 
-    // 5. logging
-    this.Logger.space()
-    this.Logger.system(
-      `🎉  Successfully created project \x1b[33m${this.projectInfo.projectName}\x1b[0m.`
-    )
-    this.Logger.system(
-      `👉  Get started with the following commands:\n    $ \x1b[33mcd\x1b[0m ${this.projectInfo.projectName}\n    $ code .`
-    )
+      // 5. logging
+      this.Logger.space()
+      this.Logger.system(
+        `🎉  Successfully created project \x1b[33m${this.projectInfo.projectName}\x1b[0m.`
+      )
+      this.Logger.system(
+        `👉  Get started with the following commands:\n    $ \x1b[33mcd\x1b[0m ${this.projectInfo.projectName}\n    $ code .`
+      )
+    } catch (error) {
+      pkgRunner.fail()
+      throw error
+    }
   }
 
   /**

@@ -187,23 +187,28 @@ export class GitManage extends Command {
     this.Logger.space()
     const pushRunner = this.Spinner.start('📤 Push Commit to Remote Repo...')
 
-    // 2. Changes를 Staged로 이관
-    await this.Launcher.run('git', ['add', '.'], this.sWorkDir)
+    try {
+      // 2. Changes를 Staged로 이관
+      await this.Launcher.run('git', ['add', '.'], this.sWorkDir)
 
-    // 3. Commit 수행
-    await this.Launcher.run('git', [
-      'commit',
-      '-m',
-      `${this.gitInfo.commitType} ${this.gitInfo.commitMessage} `,
-      this.sWorkDir
-    ])
+      // 3. Commit 수행
+      await this.Launcher.run('git', [
+        'commit',
+        '-m',
+        `${this.gitInfo.commitType} ${this.gitInfo.commitMessage} `,
+        this.sWorkDir
+      ])
 
-    // 4. Push 수행
-    if (this.gitInfo.pushPermission) {
-      await this.Launcher.run('git', ['push', '-u', 'origin'], this.sWorkDir)
+      // 4. Push 수행
+      if (this.gitInfo.pushPermission) {
+        await this.Launcher.run('git', ['push', '-u', 'origin'], this.sWorkDir)
+      }
+
+      this.Spinner.success(pushRunner, '📤 Push Commit to Remote Repo')
+    } catch (error) {
+      pushRunner.stop()
+      throw error
     }
-
-    this.Spinner.success(pushRunner, '📤 Push Commit to Remote Repo')
   }
 
   /**
@@ -238,8 +243,14 @@ export class GitManage extends Command {
 
     // 4. Pull 수행
     const pullRunner = this.Spinner.start('📩  Pulling changes...')
-    await this.Launcher.run('git', ['pull', 'origin', sCurrentBranch], this.sWorkDir)
-    this.Spinner.success(pullRunner, '📩  Pull changes')
+
+    try {
+      await this.Launcher.run('git', ['pull', 'origin', sCurrentBranch], this.sWorkDir)
+      this.Spinner.success(pullRunner, '📩  Pull changes')
+    } catch (error) {
+      pullRunner.stop()
+      throw error
+    }
   }
 
   /**
@@ -277,7 +288,10 @@ export class GitManage extends Command {
 
     // 4-1. merge 대상이 remote라면 pull 수행
     if (this.gitInfo.targetBranch.includes('remotes')) {
-      await this.Launcher.run('git', ['pull', 'origin', `${sBranch} `], this.sWorkDir)
+      await this.Launcher.run('git', ['pull', 'origin', `${sBranch} `], this.sWorkDir).catch(error => {
+        mergeRunner.stop()
+        throw error
+      })
     }
 
     try {
@@ -399,6 +413,7 @@ export class GitManage extends Command {
 
     this.Logger.space()
     const branchRunner = this.Spinner.start('🤔 Working...')
+
     try {
       await this.Launcher.run('git', command, this.sWorkDir)
       this.Spinner.success(branchRunner, '😎 Done!')

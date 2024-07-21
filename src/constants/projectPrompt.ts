@@ -21,32 +21,42 @@ const PROJECT_INIT_PROMPT: PromptObject[] = [
     type: 'toggle',
     name: 'useTypescript',
     message: 'Use TypeScript?',
+    active: 'yes',
+    inactive: 'no',
     initial: false
   },
   {
     type: 'toggle',
     name: 'useFramework',
     message: 'Use Framework?',
+    active: 'yes',
+    inactive: 'no',
     initial: false
   },
   {
     type: 'toggle',
     name: 'useGit',
     message: 'Use Git?',
+    active: 'yes',
+    inactive: 'no',
     initial: false
   },
   {
     type: 'toggle',
     name: 'usePrettier',
     message: 'Use Prettier?',
+    active: 'yes',
+    inactive: 'no',
     initial: false
   },
-  {
-    type: 'toggle',
-    name: 'useEslint',
-    message: 'Use ESLint?',
-    initial: false
-  }
+  // {
+  //   type: 'toggle',
+  //   name: 'useEslint',
+  //   message: 'Use ESLint?',
+  //   active: 'yes',
+  //   inactive: 'no',
+  //   initial: false
+  // }
 ]
 
 const USE_FRAMEWORK: PromptObject[] = [
