@@ -317,10 +317,13 @@ export class GitManage extends Command {
     switch (this.gitInfo.branchCommand) {
       // 1. 변경
       case 'switch': {
-        // 1-1. 필요 정보 취득 (prompt)
+        // 1-1. 현재 Branch 정보 취득
         const sCurrentBranch = await this.getBranchList('current')
+
+        // 1-2. 전체 Branch 정보 취득
         const sAllBranchList = await this.getBranchList('all')
 
+        // 1-3. Branch 목록 가공   
         BRANCH_LIST[0].choices = sAllBranchList.split('\n')
           .filter(sBranch => !sBranch.includes('remote') && !sBranch.includes(sCurrentBranch))
           .map(sBranch => {
@@ -331,7 +334,7 @@ export class GitManage extends Command {
         const branchInfoResponse = await this.Prompt.call(BRANCH_LIST)
         Object.assign(this.gitInfo, branchInfoResponse)
 
-        // 1-2. 수행
+        // 1-4. Command 생성
         command.push('switch', `${this.gitInfo.targetBranch} `)
 
         break
@@ -339,9 +342,10 @@ export class GitManage extends Command {
 
       // 2. 생성
       case 'create': {
-        // 2-1. 필요 정보 취득 (prompt)
+        // 2-1. 전체 Branch 정보 취득
         const sAllBranchList = await this.getBranchList('all')
 
+        // 2-2. Branch 목록 가공  
         BRANCH_LIST[0].choices = sAllBranchList.split('\n')
           .filter(sBranch => !sBranch.includes('->') && !sBranch.includes('remote'))
           .map(sBranch => {
@@ -349,10 +353,11 @@ export class GitManage extends Command {
             return { title: sBranchName, value: sBranchName }
           })
 
+        // 2-3. 필요 정보 취득 (prompt)
         Object.assign(this.gitInfo, await this.Prompt.call(BRANCH_LIST))
         Object.assign(this.gitInfo, await this.Prompt.call(BRANCH_INFO))
 
-        // 2-2. 수행
+        // 2-4. Command 생성
         command.push('switch', '-c', this.gitInfo.targetName, this.gitInfo.targetBranch)
 
         break
@@ -362,10 +367,16 @@ export class GitManage extends Command {
       case 'rename': {
         // 3-1. 필요 정보 취득 (prompt)
         Object.assign(this.gitInfo, await this.Prompt.call(BRANCH_INFO))
+
+        // 3-2. 현재 Branch 정보 취득
         const sCurrentBranchName = await this.getBranchList('current')
 
-        // 3-2. Local 브랜치명 변경
-        command.push('branch', '-m', `${sCurrentBranchName} `, this.gitInfo.targetName)
+        // 3-3. Local Branch명 변경
+        command.push('branch', '-m', `${sCurrentBranchName}`, this.gitInfo.targetName)
+
+        if (this.gitInfo) {
+          // 3-4. Remote Branch명 반영
+        }
 
         break
       }
@@ -375,11 +386,12 @@ export class GitManage extends Command {
         // 4-1. 필요 정보 취득 (prompt)
         await this.Prompt.call([])
 
-        // 4-2. Local 삭제
+        // 4-2. Local Branch명 삭제
         command.push('branch', '-D', ``)
 
-        // 4-3. Remote 삭제
-        // if
+        if (this.gitInfo) {
+          // 4-3. Remote Branch명 삭제
+        }
 
         break
       }

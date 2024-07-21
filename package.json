@@ -20,16 +20,12 @@
     "JavaScript",
     "tool"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jujoycode/fury-tool.git"
-  },
   "author": "_jujoycode",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jujoycode/fury-tool/issues"
   },
-  "homepage": "https://github.com/jujoycode/fury-tool?tab=readme",
+  "homepage": "https://jujoycode.github.io/fury-tool/",
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@types/prompts": "^2.4.9",
