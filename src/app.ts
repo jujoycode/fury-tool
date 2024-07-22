@@ -2,7 +2,7 @@
 
 import { Command as Commander } from 'commander'
 
-import { InitProject, GitManage } from './commands'
+import { InitProject, GitManage, Setting } from './commands'
 import { Prompt, UpdateNotifier, Spinner, Launcher } from './lib'
 import { Logger, CommonUtil, FileUtil } from './utils'
 
@@ -91,7 +91,7 @@ class App {
       }
       case options.setting: {
         //READ: fury 설정 기능 제공
-        return
+        return new Setting(objCommandParams)
       }
       default: {
         //READ: Project 생성 기능
