@@ -76,7 +76,7 @@ const COMMIT_INFO: PromptObject[] = [
     }
   },
   {
-    type: 'toggle',
+    type: 'confirm',
     name: 'pushPermission',
     active: 'yes',
     inactive: 'no',
