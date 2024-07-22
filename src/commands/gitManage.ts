@@ -242,11 +242,11 @@ export class GitManage extends Command {
     }
 
     // 4. Pull 수행
-    const pullRunner = this.Spinner.start('📩  Pulling changes...')
+    const pullRunner = this.Spinner.start('📩 Pulling changes...')
 
     try {
       await this.Launcher.run('git', ['pull', 'origin', sCurrentBranch], this.sWorkDir)
-      this.Spinner.success(pullRunner, '📩  Pull changes')
+      this.Spinner.success(pullRunner, '📩 Pull changes')
     } catch (error) {
       pullRunner.stop()
       throw error
