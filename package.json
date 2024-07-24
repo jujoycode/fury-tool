@@ -14,17 +14,17 @@
     "test": "pnpm build && pnpm dev"
   },
   "keywords": [
+    "nodjs",
     "cli",
-    "git",
-    "Node",
-    "JavaScript",
-    "tool"
+    "project-management"
   ],
   "author": "_jujoycode",
   "license": "GPL-3.0-only",
-  "bugs": {
-    "url": "https://github.com/jujoycode/fury-tool/issues"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jujoycode/fury-tool.git"
   },
+  "bugs": "https://github.com/jujoycode/fury-tool/issues",
   "homepage": "https://github.com/jujoycode/fury-tool?tab=readme-ov-file#fury",
   "devDependencies": {
     "@types/node": "^20.12.7",
