@@ -62,7 +62,7 @@ $ fury -v # or fury --version
     - rename target branch
     - delete target branch
 
-- 🐛 0.1.2 - [Issue#4]('https://github.com/jujoycode/fury-tool/issues/4')
+- 🐛 0.1.2 - [Issue#4](https://github.com/jujoycode/fury-tool/issues/4)
 
 - ✨ 0.1.1 - `can create project`
   - Supported Templates
