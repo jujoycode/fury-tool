@@ -42,7 +42,7 @@ $ fury -v # or fury --version
 
 ## Document
 
-- [To be continue...](https://github.com/juhyoungRyu/queryMaker)
+- [To be continue...](https://github.com/jujoycode/fury-tool/wiki)
 
 ## Authors
 

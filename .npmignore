@@ -1,2 +1,5 @@
 src
-types
+assets
+scripts
+.prettierrc.yaml
+tsconfig.json
