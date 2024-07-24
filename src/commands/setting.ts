@@ -12,6 +12,9 @@ export class Setting extends Command {
         this.furyInfo = structuredClone(setting) as FurySetting
         this.backupInfo = structuredClone(setting) as FurySetting
 
+        this.Logger.debug(this.furyInfo)
+        this.Logger.debug(this.backupInfo)
+
         // 2. 설정할 항목 선택 (prompt)
     }
 
