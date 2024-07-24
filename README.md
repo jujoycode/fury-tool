@@ -50,7 +50,7 @@ $ fury -v # or fury --version
 
 ## Version History
 
-- ✨ 0.1.2 - `makes easier to use git`
+- ✨ 0.1.3 - `makes easier to use git`
 
   - Set up easier init and remote repository
   - Commit changes with gitmoji
@@ -61,6 +61,8 @@ $ fury -v # or fury --version
     - create new from target branch
     - rename target branch
     - delete target branch
+
+- 🐛 0.1.2 - [Issue#4]('https://github.com/jujoycode/fury-tool/issues/4')
 
 - ✨ 0.1.1 - `can create project`
   - Supported Templates
