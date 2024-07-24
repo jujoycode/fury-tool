@@ -1,6 +1,6 @@
 {
   "name": "fury-tool",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Tool that helps developers in a variety of tasks",
   "main": "dist/app.js",
   "bin": {
@@ -21,11 +21,11 @@
     "tool"
   ],
   "author": "_jujoycode",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "bugs": {
     "url": "https://github.com/jujoycode/fury-tool/issues"
   },
-  "homepage": "https://jujoycode.github.io/fury-tool/",
+  "homepage": "https://github.com/jujoycode/fury-tool?tab=readme-ov-file#fury",
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@types/prompts": "^2.4.9",
