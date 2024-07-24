@@ -2,7 +2,7 @@
 
 import { Command as Commander } from 'commander'
 
-import { InitProject, GitManage, Setting } from './commands'
+import { InitProject, GitManage, Setting, Migration } from './commands'
 import { Prompt, UpdateNotifier, Spinner, Launcher } from './lib'
 import { Logger, CommonUtil, FileUtil } from './utils'
 
@@ -45,12 +45,14 @@ class App {
    */
   private configureCommands() {
     this.program
-      .name(pkg.name)
+      .name('fury')
       .option('no option', 'Start create project')
-      .option('-g, --git', 'Start git management', false)
-      .option('-m, --migration', 'Start migration data', false)
-      .option('-s, --setting', 'Edit fury setting', false)
-      .version(pkg.version)
+      .option('-g, --git', 'Management git')
+      .option('-m, --migration', 'Migration data')
+      .option('-setting, --setting', 'Edit fury setting')
+      .helpOption('-h, --help', 'Read more information')
+      .version(pkg.version, '-v, --version', 'Output the version number')
+      .showHelpAfterError('(add --help for additional information)')
       .description(pkg.description)
       .action(async (options: FuryOption) => {
         const command = this.getCommand(options)
@@ -80,6 +82,8 @@ class App {
       utils: { CommonUtil, FileUtil }
     }
 
+    this.logger.logo()
+
     switch (true) {
       case options.git: {
         //READ: git 관련 작업 수행 (push, pull, merge, manage branch)
@@ -87,10 +91,10 @@ class App {
       }
       case options.migration: {
         //READ: DB 병합 관련 기능 수행 (table)
-        return
+        return new Migration(objCommandParams)
       }
       case options.setting: {
-        //READ: fury 설정 기능 제공
+        //READ: fury 옵션 설정 기능 (logLevel, DB Connection ...)
         return new Setting(objCommandParams)
       }
       default: {
@@ -107,7 +111,6 @@ class App {
    * app.run();
    */
   public run() {
-    this.logger.logo()
     this.program.parse(process.argv)
   }
 }
