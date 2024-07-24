@@ -13,9 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4.0.3
-        with: 
+        with:
           node-version: 20
       - uses: pnpm/action-setup@v4.0.0
+        with:
+          version: ^9
 
   publish-npm:
     needs: build
@@ -29,4 +31,4 @@ jobs:
       - run: npm build
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{secrets.FURYTOKEN}}
