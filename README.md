@@ -24,20 +24,20 @@ pnpm install -g fury-tool
 ## Usage
 
 ```bash
-# When you want create new project with fury
+# When you want create new project with Fury
 $ fury
 
-# When you want push all changes [WIP]
+# When you want Management git with Fury
 $ fury -g # or fury --git
 
-# When you want to migrate DB [Next]
+# When you want to migrate DB [Next (0.1.3)]
 $ fury -m # or fury --migration
 
-# When you want to access help information
+# When you want to view more information
 $ fury -h # or fury --help
 
-# When you want to access version information
-$ fury -V # or fury --version
+# When you want to view version information
+$ fury -v # or fury --version
 ```
 
 ## Document
@@ -46,15 +46,30 @@ $ fury -V # or fury --version
 
 ## Authors
 
-- juhyoungRyu - Project initial and development
+- \_jujooycode - Project initial and development
 
 ## Version History
 
-- 0.0.1
-  - `fury` can create Project
-    - `javascript`
-    - `typescript`
+- ✨ 0.1.2 - `makes easier to use git`
+
+  - Set up easier init and remote repository
+  - Commit changes with gitmoji
+  - Receive changes from remote repository with one click
+  - Merge current and target branches easily
+  - Easy branch management
+    - replacement other branch
+    - create new from target branch
+    - rename target branch
+    - delete target branch
+
+- ✨ 0.1.1 - `can create project`
+  - Supported Templates
+    - javascript
+    - typescript
+  - Optional
+    - git
+    - prettier
 
 ## License
 
-This project is licensed under the [MIT] License
+This project is licensed under the [GPLv3] License

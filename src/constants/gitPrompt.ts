@@ -110,7 +110,7 @@ const BRANCH_COMMAND: PromptObject[] = [
     name: 'branchCommand',
     message: 'Select the branch action you want: ',
     choices: [
-      { title: 'Switch', value: 'switch' },
+      { title: 'Switch Other', value: 'switch' },
       { title: 'Create New', value: 'create' },
       { title: 'Rename', value: 'rename' },
       { title: 'Delete', value: 'delete' },
