@@ -28,7 +28,7 @@ class App {
   constructor() {
     this.program = new Commander()
     this.prompt = new Prompt()
-    // UpdateNotifier.call(pkg) //TODO: 빌드 시 주석 해제
+    UpdateNotifier.call(pkg)
 
     this.spinner = Spinner.getInstance()
     this.launcher = Launcher.getInstance()
