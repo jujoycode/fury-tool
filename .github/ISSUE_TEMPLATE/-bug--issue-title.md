@@ -1,7 +1,7 @@
 ---
 name: 'Issue: Bug report'
 about: Create a report for bug improve
-title: '[BUG] '
+title: '[BUG] Title'
 labels: bug
 assignees: ''
 ---
@@ -23,6 +23,8 @@ assignees: ''
 **Screenshots**
 
 <!-- 버그가 명확하게 확인되는 스크린샷을 첨부해주세요. -->
+
+-
 
 **Desktop:**
 
