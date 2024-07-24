@@ -20,6 +20,6 @@ jobs:
           version: ^9
       - run: pnpm install
       - run: pnpm run build
-      - run: pnpm run publish
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.FURYTOKEN}}
