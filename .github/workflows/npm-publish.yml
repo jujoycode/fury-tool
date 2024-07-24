@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: npm build
-      - run: npm publish
+      - run: pnpm run build
+      - run: pnpm run publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.FURYTOKEN}}
