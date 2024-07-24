@@ -8,7 +8,7 @@
 - Make it easier to use `git`
 - Many other convenience features ⭐️
 
-## Installation
+### Installation
 
 ```bash
 # npm
@@ -21,7 +21,7 @@ yarn global add fury-tool
 pnpm install -g fury-tool
 ```
 
-## Usage
+### Usage
 
 ```bash
 # When you want create new project with Fury
@@ -40,15 +40,19 @@ $ fury -h # or fury --help
 $ fury -v # or fury --version
 ```
 
-## Document
+### Document
 
 - [To be continue...](https://github.com/jujoycode/fury-tool/wiki)
 
-## Authors
+### Authors
 
 - \_jujooycode - Project initial and development
 
-## Version History
+### Version History
+
+- ✨ 0.1.4 - `the latest version update notification feature`
+
+  - ➕ [update-notifier@7.1.0](https://www.npmjs.com/package/update-notifier)
 
 - ✨ 0.1.3 - `makes easier to use git`
 
@@ -72,6 +76,6 @@ $ fury -v # or fury --version
     - git
     - prettier
 
-## License
+### License
 
 This project is licensed under the [GPLv3] License
