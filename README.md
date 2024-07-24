@@ -30,7 +30,7 @@ $ fury
 # When you want Management git with Fury
 $ fury -g # or fury --git
 
-# When you want to migrate DB [Next (0.1.3)]
+# When you want to migrate DB [Next (0.1.5)]
 $ fury -m # or fury --migration
 
 # When you want to view more information
