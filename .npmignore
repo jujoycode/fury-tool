@@ -3,3 +3,5 @@ assets
 scripts
 .prettierrc.yaml
 tsconfig.json
+.vscode
+.github
