@@ -1,0 +1,81 @@
+{
+  "editor.formatOnSave": true, // 저장 시 자동 포맷팅
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // 기본 포맷터를 Prettier로 설정
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.singleQuote": true, // 싱글 쿼테이션 사용
+  "prettier.trailingComma": "all", // 모든 가능한 곳에 콤마 추가
+  "prettier.tabWidth": 4, // 탭 너비 설정
+  "prettier.useTabs": true,
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+  "todohighlight.isEnable": true,
+  "todohighlight.isCaseSensitive": true,
+  "todohighlight.keywords": [
+    {
+      "text": "TODO:",
+      "color": "white",
+      "backgroundColor": "#0D698B"
+    },
+    {
+      "text": "DONE:",
+      "color": "gray",
+      "backgroundColor": "transparent",
+      "textDecoration": "line-through",
+      "isWholeLine": true
+    },
+    {
+      "text": "MUST:",
+      "color": "white",
+      "backgroundColor": "#E34234"
+    },
+    {
+      "text": "NOTE:",
+      "color": "#333652",
+      "backgroundColor": "#FAD02C"
+    },
+    {
+      "text": "READ:",
+      "color": "#E9EAEC",
+      "backgroundColor": "#90ADC6"
+    },
+    {
+      "text": "ENHANCE:",
+      "color": "#E9EAEC",
+      "backgroundColor": "#05b55a"
+    }
+  ],
+  "todohighlight.defaultStyle": {
+    "overviewRulerColor": "#ffab00",
+    "cursor": "pointer"
+  },
+  "todohighlight.include": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.html",
+    "**/*.php",
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "todohighlight.exclude": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.vscode/**",
+    "**/.github/**",
+    "**/_output/**",
+    "**/*.min.*",
+    "**/*.map",
+    "**/.next/**"
+  ],
+  "todohighlight.maxFilesForSearch": 5120,
+  "todohighlight.toggleURI": false
+}

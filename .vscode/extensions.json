@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "eamodio.gitlens",
+    "YoavBls.pretty-ts-errors",
+    "wayou.vscode-todo-highlight"
+  ]
+}
