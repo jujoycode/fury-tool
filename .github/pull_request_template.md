@@ -10,17 +10,16 @@
 
 ### Changes ✒️
 
-- [ ] ✨ 새로운 기능 추가
-- [ ] 🐛 버그 수정
-- [ ] 💄 디자인 변경
-- [ ] 🐌 코드에 영향을 주지 않는 변경사항(오타 수정, 탭 사이즈 변경, 변수명 변경)
-- [ ] 🔨 코드 리팩토링
-- [ ] 📂 파일 혹은 폴더명 수정
-- [ ] ✏️ 주석 추가 및 수정
-- [ ] 📝 문서 수정
-- [ ] 🏗️ package.json 혹은 빌드 스크립트 수정
-- [ ] ✅ 테스트 추가, 테스트 리팩토링
-<!-- - 주석 해제 후 직접 작성 -->
+- [ ] ✨ New Feature
+- [ ] 🐛 Bug Fix
+- [ ] 💄 Style Change
+- [ ] 🐌 Changes that don't affect your code (Fixed typo, Changed variable name)
+- [ ] 🔨 Code Refactoring
+- [ ] 📂 Edit file or folder name
+- [ ] ✏️ Add or Edit Comments
+- [ ] 📝 Edit Document
+- [ ] 🏗️ Edit package.json or Build Script
+- [ ] ✅ Add tests, Refactor tests
 
 ### Screenshot 📷
 
@@ -28,5 +27,5 @@
 
 ### Test Checklist ☑️
 
-- [ ] test1
-- [ ] test2
+- [ ] Has this feature been tested? <!-- 해당 기능에 대한 테스트가 완료되었습니까? -->
+- [ ] Have you confirmed that it runs normally after building? <!-- 빌드 후 정상적으로 실행되는 것을 확인하셨나요? -->
