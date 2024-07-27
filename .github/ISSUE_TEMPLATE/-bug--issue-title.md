@@ -1,10 +1,9 @@
 ---
 name: 'Issue: Bug report'
 about: Create a report for bug improve
-title: "[BUG] Title"
+title: '🐛 Title'
 labels: bug
 assignees: ''
-
 ---
 
 **Bug Description**
@@ -12,6 +11,8 @@ assignees: ''
 <!-- 버그에 대한 명확하고 간결한 설명을 작성해주세요. -->
 
 > Write here...
+
+---
 
 **Reproduction Method**
 
@@ -21,13 +22,17 @@ assignees: ''
 2.
 3.
 
-**Screenshots**
+---
 
-<!-- 버그가 명확하게 확인되는 스크린샷을 첨부해주세요. -->
+**Screenshots**
 
 -
 
-**Desktop:**
+<!-- 버그가 명확하게 확인되는 스크린샷을 첨부해주세요. -->
+
+---
+
+- **System:**
 
 <!-- 사용하시는 시스템에 대한 정보를 기입해주세요. -->
 
