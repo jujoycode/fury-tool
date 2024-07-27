@@ -1,9 +1,10 @@
 ---
 name: 'Issue: Feature request'
 about: Suggest an idea for this project
-title: '✨ Title'
-labels: 'enhancement'
+title: "✨ Title"
+labels: enhancement
 assignees: ''
+
 ---
 
 **Please explain what problem the proposed function is to solve.**
