@@ -191,7 +191,13 @@ export class GitManage extends Command {
 	 * await this.pushGit();
 	 */
 	private async pushGit() {
-		//ENHANCE: fury.yaml 존재 확인 프로세스 추가 후 COMMIT_INFO[0].choices 수정
+		// fury.yaml 존재 확인 후 COMMIT_INFO[0].choices 수정
+		const sPath = this.FileUtil.makePath(this.sWorkDir, 'fury.yaml')
+		if (await this.FileUtil.checkExist(sPath)) {
+			const fileContents = this.FileUtil.yamlConvertToJsObject(sPath) as { [key: string]: any }
+			const commitConvention = fileContents['commit-convention']
+			COMMIT_INFO[0].choices = commitConvention
+		}
 
 		// 1. commit 관련 정보 취득 (prompt)
 		Object.assign(this.gitInfo, await this.Prompt.call(COMMIT_INFO))

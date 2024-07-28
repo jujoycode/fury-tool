@@ -19,7 +19,8 @@ export class NoDataException extends Exception {
       usePrettier: '[Use Prettier] value',
       useEslint: '[Use Eslint] value',
       frameworkType: '[Framework Type] value',
-      remoteUrl: '[Remote URL] value'
+      remoteUrl: '[Remote URL] value',
+      fileName: '[File Name] value'
     }
 
     return convertTemplate[message]

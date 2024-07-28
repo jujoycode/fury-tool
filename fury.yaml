@@ -1,0 +1,9 @@
+commit-convention:
+  - title: Work in Progress
+    value: Wip
+  - title: New Feature
+    value: Feat
+  - title: Bug Fix
+    value: Fix
+  - title: Modify Code
+    value: Modify
