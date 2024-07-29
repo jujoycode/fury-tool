@@ -1,7 +1,6 @@
-import prompts, { PromptObject } from 'prompts';
-export { PromptObject };
-export declare class Prompt {
-    private prompt;
+import { Question } from '../interfaces/prompt';
+export declare class Prompter {
+    private Prompter;
     constructor();
-    call(PromptObject: PromptObject[]): Promise<prompts.Answers<string>>;
+    ask<T extends Question>(questions: T[]): Promise<Record<string, string | boolean>>;
 }
