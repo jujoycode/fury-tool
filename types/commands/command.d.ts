@@ -1,14 +1,14 @@
-import type { Launcher, Prompt, Spinner } from '../lib';
+import type { Launcher, Prompter, Spinner } from '../lib';
 import type { Logger, CommonUtil, FileUtil } from '../utils';
 export declare abstract class Command {
-    protected Prompt: Prompt;
+    protected Prompter: Prompter;
     protected Logger: Logger;
     protected Spinner: Spinner;
     protected Launcher: Launcher;
     protected CommonUtil: typeof CommonUtil;
     protected FileUtil: typeof FileUtil;
-    constructor({ prompt, logger, spinner, launcher, utils }: {
-        prompt: Prompt;
+    constructor({ Prompter, logger, spinner, launcher, utils }: {
+        Prompter: Prompter;
         logger: Logger;
         spinner: Spinner;
         launcher: Launcher;
