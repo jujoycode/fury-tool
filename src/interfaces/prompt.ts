@@ -6,6 +6,9 @@ interface BaseQuestion {
 
 interface InputQuestion extends BaseQuestion {
 	type: 'input'
+	default?: string
+	required?: boolean
+	validate?: (prev: string) => boolean | string | Promise<boolean | string>
 }
 
 interface SelectQuestion extends BaseQuestion {
@@ -15,10 +18,12 @@ interface SelectQuestion extends BaseQuestion {
 		value: string
 		description?: string
 	}[]
+	loop?: boolean
 }
 
 interface ConfirmQuestion extends BaseQuestion {
 	type: 'confirm'
+	default: boolean
 }
 
 type Question = InputQuestion | SelectQuestion | ConfirmQuestion

@@ -21,18 +21,18 @@ export class InitProject extends Command {
 	 */
 	async prepare(): Promise<void> {
 		// 0. Project 생성을 위한 기본 정보 취득 (prompt)
-		const projectInitResponse = await this.Prompt.call(PROJECT_INIT_PROMPT)
+		const projectInitResponse = await this.Prompter.ask(PROJECT_INIT_PROMPT)
 		Object.assign(this.projectInfo, projectInitResponse)
 
 		// 0-1. Framework 종류 정보 취득 (prompt)
 		if (this.projectInfo.useFramework) {
-			const response = await this.Prompt.call(USE_FRAMEWORK)
+			const response = await this.Prompter.ask(USE_FRAMEWORK)
 			Object.assign(this.projectInfo, response)
 		}
 
 		// 0-2. git remote URL 정보 취득 (prompt)
 		if (this.projectInfo.useGit) {
-			const response = await this.Prompt.call(USE_GIT)
+			const response = await this.Prompter.ask(USE_GIT)
 			Object.assign(this.projectInfo, response)
 		}
 

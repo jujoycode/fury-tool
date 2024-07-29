@@ -1,9 +1,9 @@
-import type { Launcher, Prompt, Spinner } from '../lib'
+import type { Launcher, Prompter, Spinner } from '../lib'
 import type { Logger, CommonUtil, FileUtil } from '../utils'
 import type { Exception } from '../exception'
 
 export abstract class Command {
-	protected Prompt: Prompt
+	protected Prompter: Prompter
 	protected Logger: Logger
 	protected Spinner: Spinner
 	protected Launcher: Launcher
@@ -12,19 +12,19 @@ export abstract class Command {
 	protected FileUtil: typeof FileUtil
 
 	constructor({
-		prompt,
+		Prompter,
 		logger,
 		spinner,
 		launcher,
 		utils
 	}: {
-		prompt: Prompt
+		Prompter: Prompter
 		logger: Logger
 		spinner: Spinner
 		launcher: Launcher
 		utils: { CommonUtil: typeof CommonUtil; FileUtil: typeof FileUtil }
 	}) {
-		this.Prompt = prompt
+		this.Prompter = Prompter
 		this.Logger = logger
 		this.Spinner = spinner
 		this.Launcher = launcher

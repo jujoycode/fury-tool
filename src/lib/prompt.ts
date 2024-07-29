@@ -1,56 +1,27 @@
-import prompts, { PromptObject } from 'prompts'
-import { Logger, CommonUtil } from '../utils'
+import { input, select, confirm } from '@inquirer/prompts'
+import { CommonUtil } from '../utils'
 
-export { PromptObject }
+import { Question } from '../interfaces/prompt'
 
-import { input, select } from '@inquirer/prompts'
-import {
-	InputQuestion,
-	SelectQuestion,
-	ConfirmQuestion,
-	Question,
-	QuestionResult
-} from '../interfaces/prompt'
-
-export class Prompt {
-	private prompt: typeof prompts
-
-	constructor() {
-		this.prompt = prompts
-	}
-
-	public async call(PromptObject: PromptObject[]) {
-		const result = await this.prompt(PromptObject, {
-			onCancel: () => {
-				//ENHANCE: custom exception으로 변경 후, Rollback 호출
-				Logger.getInstance().error('User Cancel Exception')
-			}
-		})
-
-		CommonUtil.validateRequireFields(
-			result,
-			PromptObject.map(prompt => String(prompt.name))
-		)
-		return result
-	}
-}
-
-class Prompter {
+export class Prompter {
 	private Prompter: {
 		input: typeof input
 		select: typeof select
+		confirm: typeof confirm
 	}
 
 	constructor() {
 		this.Prompter = {
 			input,
-			select
+			select,
+			confirm
 		}
 	}
 
 	public async ask<T extends Question>(questions: T[]): Promise<Record<string, string | boolean>> {
 		const returnObject: Record<string, string | boolean> = {}
 
+		// ENHANCE: User Exception Error 발생 시 예외 처리 필요...
 		for (let i = 0; i < questions.length; i++) {
 			const question = questions[i]
 			let answer = undefined
@@ -65,6 +36,11 @@ class Prompter {
 					answer = await this.Prompter.select({ ...question })
 					break
 				}
+
+				case 'confirm': {
+					answer = await this.Prompter.confirm({ ...question })
+					break
+				}
 			}
 
 			Object.assign(returnObject, { [question.title]: answer })
@@ -75,7 +51,6 @@ class Prompter {
 			questions.map(question => String(question.title))
 		)
 
-		console.log(returnObject)
 		return returnObject
 	}
 }
