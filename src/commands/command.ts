@@ -51,6 +51,7 @@ export abstract class Command {
 			await this.finalize()
 		} catch (errorContext: unknown) {
 			const err = errorContext as Exception
+
 			this.Logger.errorD(err)
 			await this.rollback()
 		}

@@ -49,7 +49,7 @@ class App {
 			.option('no option', 'Start create project')
 			.option('-g, --git', 'Management git')
 			.option('-m, --migration', 'Migration data')
-			.option('-setting, --setting', 'Edit fury setting')
+			.option('--setting', 'Edit fury setting')
 			.helpOption('-h, --help', 'Read more information')
 			.version(pkg.version, '-v, --version', 'Output the version number')
 			.showHelpAfterError('(add --help for additional information)')

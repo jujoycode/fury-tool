@@ -1,5 +1,6 @@
-import { Command } from "./";
+import { Command } from './';
 export declare class Setting extends Command {
+    private settingInfo;
     private furyInfo;
     private backupInfo;
     protected prepare(): Promise<void>;

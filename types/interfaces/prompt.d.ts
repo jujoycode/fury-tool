@@ -17,6 +17,7 @@ interface SelectQuestion extends BaseQuestion {
         description?: string;
     }[];
     loop?: boolean;
+    default?: string;
 }
 interface ConfirmQuestion extends BaseQuestion {
     type: 'confirm';

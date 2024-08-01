@@ -9,7 +9,7 @@
 	},
 	"prettier.singleQuote": true,
 	"prettier.trailingComma": "none",
-	"prettier.tabWidth": 2,
+	"prettier.tabWidth": 4,
 	"prettier.arrowParens": "avoid",
 	"prettier.bracketSpacing": true,
 	"prettier.endOfLine": "lf",

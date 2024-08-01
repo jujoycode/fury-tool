@@ -1,3 +1,4 @@
 {
-  "logLevel": "info"
+	"logLevel": "trace",
+	"dbConnection": {}
 }

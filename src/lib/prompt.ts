@@ -18,7 +18,9 @@ export class Prompter {
 		}
 	}
 
-	public async ask<T extends Question>(questions: T[]): Promise<Record<string, string | boolean>> {
+	public async ask<T extends Question>(
+		questions: T[]
+	): Promise<Record<string, string | boolean>> {
 		const returnObject: Record<string, string | boolean> = {}
 
 		// ENHANCE: User Exception Error 발생 시 예외 처리 필요...
