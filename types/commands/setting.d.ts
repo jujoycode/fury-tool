@@ -7,4 +7,5 @@ export declare class Setting extends Command {
     protected execute(): Promise<void>;
     protected finalize(): Promise<void>;
     protected rollback(): Promise<void>;
+    private setLogLevel;
 }

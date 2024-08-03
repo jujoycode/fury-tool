@@ -15,7 +15,7 @@ const SETTING_INIT_PROMPT: SelectQuestion[] = [
 const SETTING_LOGLEVEL_PROMPT: Question[] = [
 	{
 		type: 'select',
-		title: 'targetValue',
+		title: 'logLevel',
 		message: 'What level do you want to set it to?:',
 		choices: [
 			{
