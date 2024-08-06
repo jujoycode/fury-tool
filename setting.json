@@ -1,4 +1,6 @@
 {
-	"logLevel": "info",
-	"dbConnection": {}
+  "logLevel": "info",
+  "dbConnection": {
+    "local": {}
+  }
 }

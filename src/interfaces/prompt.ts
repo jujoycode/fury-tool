@@ -14,8 +14,8 @@ interface InputQuestion extends BaseQuestion {
 interface SelectQuestion extends BaseQuestion {
 	type: 'select'
 	choices: {
-		name: string
-		value: string
+		name: String
+		value: String
 		description?: string
 	}[]
 	loop?: boolean

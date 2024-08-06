@@ -1,5 +1,5 @@
 import { Command } from './'
-import { SETTING_INIT_PROMPT, SETTING_LOGLEVEL_PROMPT } from '../constants'
+import { SETTING_INIT_PROMPT, SETTING_LOGLEVEL_PROMPT, SETTING_DB_CONNECTION } from '../constants'
 
 import setting from '../../setting.json'
 
@@ -29,6 +29,7 @@ export class Setting extends Command {
 			}
 
 			case 'dbConnection': {
+				await this.setDbConnection()
 				break
 			}
 		}
@@ -76,5 +77,19 @@ export class Setting extends Command {
 
 	private async setLogLevel() {
 		Object.assign(this.furyInfo, await this.Prompter.ask(SETTING_LOGLEVEL_PROMPT))
+	}
+
+	private async setDbConnection() {
+		Object.keys(setting.dbConnection).map(connectionKey => {
+			SETTING_DB_CONNECTION[0].choices.push({ name: connectionKey, value: connectionKey })
+		})
+
+		SETTING_DB_CONNECTION[0].choices.push({
+			name: '✨ \x1b[33mNew\x1b[0m',
+			value: 'new'
+		})
+
+		// Object.assign(this.furyInfo, await this.Prompter.ask(SETTING_LOGLEVEL_PROMPT))
+		await this.Prompter.ask(SETTING_DB_CONNECTION)
 	}
 }

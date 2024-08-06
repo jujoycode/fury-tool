@@ -48,4 +48,13 @@ const SETTING_LOGLEVEL_PROMPT: Question[] = [
 	}
 ]
 
-export { SETTING_INIT_PROMPT, SETTING_LOGLEVEL_PROMPT }
+const SETTING_DB_CONNECTION: SelectQuestion[] = [
+	{
+		type: 'select',
+		title: 'connection',
+		message: `Select a connection name to set (or select 'New' to create a new connection):`,
+		choices: []
+	}
+]
+
+export { SETTING_INIT_PROMPT, SETTING_LOGLEVEL_PROMPT, SETTING_DB_CONNECTION }

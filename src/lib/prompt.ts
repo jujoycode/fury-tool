@@ -1,4 +1,4 @@
-import { input, select, confirm } from '@inquirer/prompts'
+import { input, select, confirm, Separator } from '@inquirer/prompts'
 import { CommonUtil } from '../utils'
 
 import { Question } from '../interfaces/prompt'
@@ -18,9 +18,11 @@ export class Prompter {
 		}
 	}
 
-	public async ask<T extends Question>(
-		questions: T[]
-	): Promise<Record<string, string | boolean>> {
+	public getSeparator() {
+		return new Separator()
+	}
+
+	public async ask<T extends Question>(questions: T[]): Promise<Record<string, string | boolean>> {
 		const returnObject: Record<string, string | boolean> = {}
 
 		// ENHANCE: User Exception Error 발생 시 예외 처리 필요...

@@ -9,13 +9,20 @@ interface InputQuestion extends BaseQuestion {
     required?: boolean;
     validate?: (prev: string) => boolean | string | Promise<boolean | string>;
 }
+type Choice<T> = {
+    name: T;
+    value: T;
+    description?: string;
+};
+declare class Separator {
+    readonly separator: string;
+    readonly type = "separator";
+    constructor(separator?: string);
+    static isSeparator(choice: undefined | Separator | Record<string, unknown>): choice is Separator;
+}
 interface SelectQuestion extends BaseQuestion {
     type: 'select';
-    choices: {
-        name: string;
-        value: string;
-        description?: string;
-    }[];
+    choices: (Separator | Choice<string>)[];
     loop?: boolean;
     default?: string;
 }

@@ -8,4 +8,5 @@ export declare class Setting extends Command {
     protected finalize(): Promise<void>;
     protected rollback(): Promise<void>;
     private setLogLevel;
+    private setDbConnection;
 }
