@@ -11,10 +11,6 @@ export class DBTool {
 		this.engine = engine ? engine : 'mysql'
 	}
 
-	public async connectLocalDB() {
-		this.localConnection = await this.createConnection('local')
-	}
-
 	public async createConnection(connectionName: string): Promise<SQL.Connection> {
 		const dbCollection = structuredClone(setting.dbConnection) as { [key: string]: DBInfo }
 		const dbInfo = dbCollection[connectionName]
@@ -30,5 +26,9 @@ export class DBTool {
 				throw new Error('지원하지 않는 DB Engine 입니다.')
 			}
 		}
+	}
+
+	public async connectLocalDB() {
+		this.localConnection = await this.createConnection('local')
 	}
 }
