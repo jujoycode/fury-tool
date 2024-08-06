@@ -1,3 +1,11 @@
 {
-  "logLevel": "info"
+	"logLevel": "info",
+	"dbConnection": {
+		"local": {
+			"host": "127.0.0.1",
+			"database": "console",
+			"user": "calsadmin",
+			"password": "calsadmin1!"
+		}
+	}
 }
