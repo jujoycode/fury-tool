@@ -259,9 +259,9 @@ export class GitManage extends Command {
 		try {
 			await this.Launcher.run('git', ['pull', 'origin', sCurrentBranch], this.sWorkDir)
 			this.Spinner.success(pullRunner, '📩 Pull changes')
-		} catch (error) {
+		} catch (Error) {
 			pullRunner.stop()
-			throw error
+			throw Error
 		}
 	}
 
@@ -303,12 +303,12 @@ export class GitManage extends Command {
 
 		// 4-1. merge 대상이 remote라면 pull 수행
 		if (this.gitInfo.targetBranch.includes('remotes')) {
-			await this.Launcher.run('git', ['pull', 'origin', `${sBranch} `], this.sWorkDir).catch(
-				error => {
-					mergeRunner.stop()
-					throw error
-				}
-			)
+			try {
+				await this.Launcher.run('git', ['pull', 'origin', `${sBranch} `], this.sWorkDir)
+			} catch (error) {
+				mergeRunner.stop()
+				throw error
+			}
 		}
 
 		try {
@@ -321,7 +321,6 @@ export class GitManage extends Command {
 			// 4-2. 에러가 발생하였다면, 유저에게 완료가 되었는지 여부 확인 후 병합 종료 커맨드 실행
 			mergeRunner.fail()
 			this.Logger.error(error.message)
-
 			this.Logger.space()
 
 			const mergeCompleteResponse = await this.Prompter.ask(MERGE_INFO)
@@ -371,7 +370,7 @@ export class GitManage extends Command {
 				Object.assign(this.gitInfo, branchInfoResponse)
 
 				// 1-4. Command 생성
-				command.push('switch', `${this.gitInfo.targetBranch} `)
+				command.push('switch', `${this.gitInfo.targetBranch}`)
 
 				break
 			}
