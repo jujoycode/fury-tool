@@ -8,4 +8,8 @@ interface DBInfo {
 	pemPath?: string
 }
 
-export { DBEngine, DBInfo }
+interface MigInfo {
+	targetDB: string
+}
+
+export { DBEngine, DBInfo, MigInfo }

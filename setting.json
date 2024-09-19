@@ -1,6 +1,12 @@
 {
-	"logLevel": "info",
+	"logLevel": "trace",
 	"dbConnection": {
+		"fury": {
+			"host": "127.0.0.1",
+			"database": "fury",
+			"user": "calsadmin",
+			"password": "calsadmin1!"
+		},
 		"local": {
 			"host": "127.0.0.1",
 			"database": "console",

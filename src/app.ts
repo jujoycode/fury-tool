@@ -77,8 +77,6 @@ class App {
 			utils: { CommonUtil, FileUtil }
 		}
 
-		this.logger.logo()
-
 		switch (true) {
 			case options.git: {
 				//READ: git 관련 작업 수행 (push, pull, merge, manage branch)
@@ -94,6 +92,7 @@ class App {
 			}
 			default: {
 				//READ: Project 생성 기능
+				this.logger.logo()
 				return new InitProject(objCommandParams)
 			}
 		}

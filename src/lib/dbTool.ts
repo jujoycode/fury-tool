@@ -5,30 +5,34 @@ import { DBEngine, DBInfo } from '../interfaces/dbTool'
 
 export class DBTool {
 	private engine: DBEngine
-	private localConnection?: SQL.Connection
+	public localConnection?: SQL.Connection
+	public connection?: SQL.Connection
 
 	constructor(engine?: DBEngine) {
 		this.engine = engine ? engine : 'mysql'
 	}
 
-	public async createConnection(connectionName: string): Promise<SQL.Connection> {
+	private async createConnection(connectionName: string): Promise<SQL.Connection> {
 		const dbCollection = structuredClone(setting.dbConnection) as { [key: string]: DBInfo }
 		const dbInfo = dbCollection[connectionName]
 
 		switch (this.engine) {
 			case 'mysql': {
 				const pool = SQL.createPool(dbInfo)
-
 				return await pool.getConnection()
 			}
 
 			default: {
-				throw new Error('지원하지 않는 DB Engine 입니다.')
+				throw new Error('This DB engine is not supported.')
 			}
 		}
 	}
 
 	public async connectLocalDB() {
 		this.localConnection = await this.createConnection('local')
+	}
+
+	public async connectDB(connectionName: string) {
+		this.connection = await this.createConnection(connectionName)
 	}
 }
