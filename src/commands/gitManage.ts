@@ -166,7 +166,7 @@ export class GitManage extends Command {
 		}
 
 		// 1. git init 명령어 수행
-		await this.Launcher.run('git', ['init'], this.sWorkDir)
+		await this.Launcher.run('git', ['init', `--initial-branch=main`], this.sWorkDir)
 
 		// 2. 관련 정보 취득 (prompt)
 		Object.assign(this.gitInfo, await this.Prompter.ask(INIT_SETTING))
@@ -178,7 +178,7 @@ export class GitManage extends Command {
 			// 4. first commit 수행
 			await this.Launcher.run('git', ['add', '.'], this.sWorkDir)
 			await this.Launcher.run('git', ['commit', '-m', ':sparkles: Project Initial'], this.sWorkDir)
-			await this.Launcher.run('git', ['push', '-u', 'origin', 'master'], this.sWorkDir)
+			await this.Launcher.run('git', ['push', '-u', 'origin', 'main'], this.sWorkDir)
 		}
 	}
 

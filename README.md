@@ -2,11 +2,14 @@
 
 # Fury
 
-> fury is a tool that helps developers in a variety of tasks.
+> Fury is a versatile tool that helps developers streamline various tasks.
 
 - It supports make it easier to create node projects that fit different frameworks
 - Make it easier to use `git`
 - Many other convenience features ⭐️
+  
+  
+> **Note:**  Requires Git version 2.28.0 or higher.
 
 ## Installation
 
@@ -27,7 +30,7 @@ pnpm install -g fury-tool
 # When you want create new project with Fury
 $ fury
 
-# When you want Management git with Fury
+# When you want Manage git with Fury
 $ fury -g # or fury --git
 
 # When you want to migrate DB [Next (0.1.5)]
@@ -49,7 +52,6 @@ $ fury -v # or fury --version
 - \_jujooycode - Project initial and development
 
 ## Version History
-
 - ✨ 0.1.4 - `the latest version update notification feature`
 
   - ➕ [update-notifier@7.1.0](https://www.npmjs.com/package/update-notifier)

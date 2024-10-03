@@ -101,14 +101,15 @@ export class InitProject extends Command {
 
 			try {
 				// 3-2-2. git init 수행
-				await this.Launcher.run('git', ['init'], this.sWorkDir)
+				await this.Launcher.run('git', ['init', `--initial-branch=${this.projectInfo.defaultBranch!}`], this.sWorkDir)
 
 				// 3-2-3. git remote add origin 수행
-				await this.Launcher.run(
-					'git',
-					['remote', 'add', 'origin', this.projectInfo.remoteUrl!],
-					this.sWorkDir
-				)
+				await this.Launcher.run('git', ['remote', 'add', 'origin', this.projectInfo.remoteUrl!], this.sWorkDir)
+
+				// 3-2-4. first push
+				await this.Launcher.run('git', ['add', '.'], this.sWorkDir)
+				await this.Launcher.run('git', ['commit', '-m', ':sparkles: Init Project'], this.sWorkDir)
+				await this.Launcher.run('git', ['push', '-u', 'origin', 'main'], this.sWorkDir)
 
 				this.Spinner.success(gitRunner, '🌴  Setup Git')
 			} catch (error: any) {
@@ -117,12 +118,12 @@ export class InitProject extends Command {
 			}
 		}
 
-		// 3-3. prettier 사용 여부에 따라 .prettierrc.yaml 파일 생성
+		// 3-3. prettier 사용 여부에 따라 .prettierrc 파일 생성
 		if (this.projectInfo.usePrettier) {
 			const prtRunner = this.Spinner.start('🎨  Setup Prettier...')
 
 			try {
-				await this.FileUtil.createFile(this.sWorkDir, '.prettierrc.yaml', '')
+				await this.FileUtil.createFile(this.sWorkDir, '.prettierrc', '{ "semi": false }')
 				this.Spinner.success(prtRunner, '🎨  Setup Prettier')
 			} catch (error) {
 				prtRunner.fail()

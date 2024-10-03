@@ -14,6 +14,7 @@ interface ProjectInfo {
   useEslint: boolean
   frameworkType: 'default' | 'react' | 'vue' | 'express'
   remoteUrl?: string
+  defaultBranch?: string
 }
 
 interface LogLevel {

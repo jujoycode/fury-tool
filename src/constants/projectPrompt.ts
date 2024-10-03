@@ -72,6 +72,12 @@ const USE_GIT: Question[] = [
 				return false
 			}
 		}
+	},
+	{
+		type: 'input',
+		title: 'defaultBranch',
+		message: 'Enter the default branch name:',
+		default: 'main'
 	}
 ]
 
