@@ -11,7 +11,7 @@
 		"exportType": "npx tsc",
 		"build": "rm -rf dist && rm -rf types && pnpm exportType && node ./scripts/build.mjs",
 		"dev": "node --no-warnings ./dist/app.js",
-		"test": "pnpm build && pnpm dev"
+		"test": "pnpm build --debug && pnpm dev"
 	},
 	"keywords": [
 		"nodjs",
