@@ -14,7 +14,7 @@ export declare class ProjectFactory extends Factory {
      */
     setup(): Promise<void>;
     /**
-     * @name setup
+     * @name getWorkDir
      * @desc return the project path
      * @example
      * factory.getWorkDir();

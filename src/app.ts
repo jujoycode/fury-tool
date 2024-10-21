@@ -6,10 +6,10 @@ import { InitProject, GitManage, Setting, Migration } from './commands'
 import { Prompter, UpdateNotifier, Spinner, Launcher } from './lib'
 import { Logger, CommonUtil, FileUtil } from './utils'
 
-import { FuryOption, LogLevel } from './interfaces/project'
-
 import { logLevel } from '../setting.json'
 import pkg from '../package.json'
+
+import type { FuryOption, LogLevel } from './interfaces/project'
 
 /**
  * @name App
